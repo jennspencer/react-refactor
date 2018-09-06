@@ -59,13 +59,10 @@ var CardList = function (_Component) {
     _this.state = {
       sortedListings: [],
       listings: [],
-      dataRoute: _this.props.themeURL + '/wp-json/visitm/v1/',
       categories: window.location.hash.substring(1) ? window.location.hash.substring(1) : null,
       filterMap: {},
       offset: 24,
-      loading: true,
-      cities: [],
-      months: []
+      loading: true
     };
 
     _this.filterSelect = _this.filterSelect.bind(_this);
@@ -79,30 +76,8 @@ var CardList = function (_Component) {
       this.setState({ loading: true });
 
       var data = this.props.allListings;
-      var cities = [];
-      var months = [];
-      if (this.props.listingType === 'events') {
-        cities = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
-          return { name: listing.city[0] };
-        }), 'name');
-        data = _lodash2.default.filter(data, function (listing) {
-          if ((0, _moment2.default)(listing.endDate).isSameOrAfter((0, _moment2.default)(), 'day')) return listing;
-        });
-        data = _lodash2.default.orderBy(data, 'startDate', 'asc');
-        months = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
-          return { name: listing.month[0], date: listing.startDate };
-        }), 'name');
-        months = _lodash2.default.orderBy(months, function (month) {
-          return new _moment2.default(month.date);
-        }, 'asc');
-      } else {
-        data = _lodash2.default.shuffle(data);
-        data = _lodash2.default.orderBy(data, 'featured', 'desc');
-      }
       this.setState({
         listings: data.slice(0, 24),
-        cities: cities,
-        months: months,
         sortedListings: data,
         loading: false
       });
@@ -192,8 +167,8 @@ var CardList = function (_Component) {
           listingType: this.props.listingType,
           themeURL: this.props.themeURL,
           categories: this.state.categories,
-          cities: this.state.cities,
-          months: this.state.months
+          cities: this.props.filters.cities,
+          months: this.props.filters.months
         }),
         _react2.default.createElement(
           'div',
@@ -238,8 +213,11 @@ CardList.defaultProps = {
   filterSelect: function filterSelect() {}
 };
 
-exports.default = (0, _reactRedux.connect)(function (state, props) {
+function mapStateToProps(state, ownProps) {
   return {
-    allListings: state.listings
+    allListings: state.listings,
+    filters: state.filters
   };
-})(CardList);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(CardList);

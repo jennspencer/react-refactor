@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.fetchAllListings = fetchAllListings;
-exports.requestAllListings = requestAllListings;
 
 var _actionTypes = require('../actions/actionTypes');
 
@@ -18,9 +17,11 @@ var _moment2 = _interopRequireDefault(_moment);
 
 var _constants = require('../constants');
 
+var _filterActions = require('./filterActions');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dataRoute = _constants.themeURL + '/wp-json/visitm/v1/';
+var dataRoute = _constants.themeURL + _constants.apiURL;
 
 function fetchAllListings(type) {
   return function (dispatch) {
@@ -48,7 +49,19 @@ function requestAllListings(dispatch, type) {
     //normalize listing data for display
     data = normalizeListings(data);
 
+    if (type === 'events') {
+      data = _lodash2.default.orderBy(data, 'startDate', 'asc');
+    } else {
+      data = _lodash2.default.shuffle(data);
+      data = _lodash2.default.orderBy(data, 'featured', 'desc');
+    }
+
     dispatch({ type: _actionTypes.ActionTypes.RECEIVED_ALL_LISTINGS_SUCCESS, data: data });
+
+    // send data off to get event-specific filters
+    if (type === 'events') {
+      dispatch((0, _filterActions.getEventFilters)(data));
+    }
   });
 }
 
@@ -104,7 +117,9 @@ function normalizeListings(listings) {
       listing.description = description.join(' ');
     }
 
-    return listing;
+    if (listing.endDate && (0, _moment2.default)(listing.endDate).isSameOrAfter((0, _moment2.default)(), 'day')) {
+      return listing;
+    }
   });
 
   return normalizedListings;

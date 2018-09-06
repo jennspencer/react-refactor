@@ -1,9 +1,10 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
 import moment from 'moment'
-import { themeURL, listingType } from '../constants'
+import { themeURL, listingType, apiURL } from '../constants'
+import { getEventFilters } from './filterActions'
 
-const dataRoute = themeURL + '/wp-json/visitm/v1/'
+const dataRoute = themeURL + apiURL
 
 export function fetchAllListings(type) {
   return dispatch => {
@@ -11,7 +12,7 @@ export function fetchAllListings(type) {
   }
 }
 
-export function requestAllListings(dispatch, type) {
+function requestAllListings(dispatch, type) {
   dispatch({ type: types.REQUEST_ALL_LISTINGS, data: type })
 
   let url = dataRoute + type
@@ -34,7 +35,19 @@ export function requestAllListings(dispatch, type) {
       //normalize listing data for display
       data = normalizeListings(data)
 
+      if (type === 'events') {
+        data = _.orderBy(data, 'startDate', 'asc')
+      } else {
+        data = _.shuffle(data)
+        data = _.orderBy(data, 'featured', 'desc')
+      }
+
       dispatch({ type: types.RECEIVED_ALL_LISTINGS_SUCCESS, data: data })
+
+      // send data off to get event-specific filters
+      if (type === 'events') {
+        dispatch(getEventFilters(data))
+      }
     })
 }
 
@@ -110,7 +123,12 @@ function normalizeListings(listings) {
       listing.description = description.join(' ')
     }
 
-    return listing
+    if (
+      listing.endDate &&
+      moment(listing.endDate).isSameOrAfter(moment(), 'day')
+    ) {
+      return listing
+    }
   })
 
   return normalizedListings

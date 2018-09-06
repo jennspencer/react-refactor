@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -8,3 +8,4 @@ var listingType = _window$reactOptions.listingType,
     themeURL = _window$reactOptions.themeURL;
 exports.listingType = listingType;
 exports.themeURL = themeURL;
+var apiURL = exports.apiURL = '/wp-json/visitm/v1/';

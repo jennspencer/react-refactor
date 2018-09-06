@@ -16,15 +16,12 @@ class CardList extends Component {
     this.state = {
       sortedListings: [],
       listings: [],
-      dataRoute: this.props.themeURL + '/wp-json/visitm/v1/',
       categories: window.location.hash.substring(1)
         ? window.location.hash.substring(1)
         : null,
       filterMap: {},
       offset: 24,
       loading: true,
-      cities: [],
-      months: [],
     }
 
     this.filterSelect = this.filterSelect.bind(this)
@@ -35,41 +32,8 @@ class CardList extends Component {
     this.setState({ loading: true })
 
     let data = this.props.allListings
-    let cities = []
-    let months = []
-    if (this.props.listingType === 'events') {
-      cities = _.uniqBy(
-        _.map(data, listing => {
-          return { name: listing.city[0] }
-        }),
-        'name',
-      )
-      data = _.filter(data, listing => {
-        if (moment(listing.endDate).isSameOrAfter(moment(), 'day'))
-          return listing
-      })
-      data = _.orderBy(data, 'startDate', 'asc')
-      months = _.uniqBy(
-        _.map(data, listing => {
-          return { name: listing.month[0], date: listing.startDate }
-        }),
-        'name',
-      )
-      months = _.orderBy(
-        months,
-        month => {
-          return new moment(month.date)
-        },
-        'asc',
-      )
-    } else {
-      data = _.shuffle(data)
-      data = _.orderBy(data, 'featured', 'desc')
-    }
     this.setState({
       listings: data.slice(0, 24),
-      cities: cities,
-      months: months,
       sortedListings: data,
       loading: false,
     })
@@ -153,8 +117,8 @@ class CardList extends Component {
           listingType={this.props.listingType}
           themeURL={this.props.themeURL}
           categories={this.state.categories}
-          cities={this.state.cities}
-          months={this.state.months}
+          cities={this.props.filters.cities}
+          months={this.props.filters.months}
         />
         <div className="row">
           <div className="listings">
@@ -195,8 +159,11 @@ CardList.defaultProps = {
   filterSelect: () => {},
 }
 
-export default connect((state, props) => {
+function mapStateToProps(state, ownProps) {
   return {
     allListings: state.listings,
+    filters: state.filters,
   }
-})(CardList)
+}
+
+export default connect(mapStateToProps)(CardList)

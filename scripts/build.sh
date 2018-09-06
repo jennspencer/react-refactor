@@ -2,7 +2,7 @@
 osascript -e 'display notification "Start" with title "React" subtitle "Build"'
 
 #js transforms 
-babel --presets react,es2015 js/src -d js/build
+babel --presets react,es2015,stage-3 js/src -d js/build
 
 #js package
 browserify js/build/app.js -o bundle.js --debug

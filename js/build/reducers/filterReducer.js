@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 exports.default = filterReducer;
 
 var _actionTypes = require('../actions/actionTypes');
@@ -18,8 +21,10 @@ function filterReducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case _actionTypes.ActionTypes.NEW_ACTION:
-      return state;
+    case _actionTypes.ActionTypes.GET_CITIES_FILTER:
+      return _extends({}, state, { cities: action.data });
+    case _actionTypes.ActionTypes.GET_MONTHS_FILTER:
+      return _extends({}, state, { months: action.data });
     default:
       return state;
   }

@@ -6,4 +6,8 @@ export const ActionTypes = keyMirror({
   // ajax calls
   REQUEST_ALL_LISTINGS: null,
   RECEIVED_ALL_LISTINGS_SUCCESS: null,
+
+  // filter actions
+  GET_MONTHS_FILTER: null,
+  GET_CITIES_FILTER: null,
 })
