@@ -111,7 +111,6 @@ class CardList extends Component {
         let listings = this.props.allListings
         if (!_.isEmpty(this.state.filterMap)) {
           let filters = this.state.filterMap
-          // console.log(filters);
           for (let k in filters) {
             if (filters[k] && filters[k] !== '') {
               if (k !== 'sort') {

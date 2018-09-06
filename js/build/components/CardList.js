@@ -114,7 +114,6 @@ var CardList = function (_Component) {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(newProps) {
       if (this.props.allListings !== newProps.allListings) {
-        console.log('loaded listings');
         this.getPage();
       }
     }
@@ -141,7 +140,6 @@ var CardList = function (_Component) {
         var listings = _this2.props.allListings;
         if (!_lodash2.default.isEmpty(_this2.state.filterMap)) {
           var filters = _this2.state.filterMap;
-          // console.log(filters);
 
           var _loop = function _loop(k) {
             if (filters[k] && filters[k] !== '') {
@@ -182,7 +180,6 @@ var CardList = function (_Component) {
       var _this3 = this;
 
       var listingData = this.state.listings;
-      // console.log(listingData);
       return _react2.default.createElement(
         'div',
         { className: 'listings-page wrapper', style: { paddingBottom: '20px' } },
