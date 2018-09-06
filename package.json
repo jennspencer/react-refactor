@@ -7,7 +7,9 @@
     "es6-promise": "^4.2.4",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.20.1",
-    "react": "^16.2.0"
+    "react": "^16.2.0",
+    "react-redux": "^5.0.7",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
@@ -22,12 +24,14 @@
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-contrib-uglify": "^3.2.1",
+    "keymirror": "^0.1.1",
     "lodash": "^4.17.4",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-select": "^1.2.1",
     "react-visibility-sensor": "^3.11.0",
+    "redux-logger": "^3.0.6",
     "uglify": "^0.1.5",
     "uglify-js": "^3.3.10",
     "uglifyify": "^4.0.5",
@@ -42,12 +46,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jennspencer/react-app.git"
+    "url": "git+https://github.com/jennspencer/react-refactor.git"
   },
   "author": "Jenn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jennspencer/react-app/issues"
+    "url": "https://github.com/jennspencer/react-refactor/issues"
   },
-  "homepage": "https://github.com/jennspencer/react-app#readme"
+  "homepage": "https://github.com/jennspencer/react-refactor#readme"
 }

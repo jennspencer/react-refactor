@@ -1,0 +1,10 @@
+{
+  "parser": "babel-eslint",
+  "plugins": ["react", "jsx-a11y", "import"],
+  "rules": {
+    "no-var": ["error"],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-mutable-exports": ["error"],
+    "constructor-super": "error"
+  }
+}
