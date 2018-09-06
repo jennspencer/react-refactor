@@ -18,8 +18,8 @@ function listingReducer() {
   var action = arguments[1];
 
   switch (action.type) {
-    case _actionTypes.ActionTypes.NEW_ACTION:
-      return state;
+    case _actionTypes.ActionTypes.RECEIVED_ALL_LISTINGS_SUCCESS:
+      return action.data;
     default:
       return state;
   }

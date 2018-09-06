@@ -3,8 +3,8 @@ import initialState from './initialState'
 
 export default function listingReducer(state = initialState.listings, action) {
   switch (action.type) {
-    case types.NEW_ACTION:
-      return state
+    case types.RECEIVED_ALL_LISTINGS_SUCCESS:
+      return action.data
     default:
       return state
   }

@@ -14,6 +14,8 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _reactRedux = require('react-redux');
+
 var _Card = require('./Card');
 
 var _Card2 = _interopRequireDefault(_Card);
@@ -55,7 +57,6 @@ var CardList = function (_Component) {
     var _this = _possibleConstructorReturn(this, (CardList.__proto__ || Object.getPrototypeOf(CardList)).call(this, props));
 
     _this.state = {
-      allListings: [],
       sortedListings: [],
       listings: [],
       dataRoute: _this.props.themeURL + '/wp-json/visitm/v1/',
@@ -75,58 +76,47 @@ var CardList = function (_Component) {
   _createClass(CardList, [{
     key: 'getPage',
     value: function getPage() {
-      var _this2 = this;
-
       this.setState({ loading: true });
-      var url = this.state.dataRoute + this.props.listingType;
+
+      var data = this.props.allListings;
       var cities = [];
       var months = [];
-      fetch(url).catch(function (error) {
-        console.error('Error fetching API page', thisPage, error);
-      }).then(function (response) {
-        if (response.status !== 200 && response.ok) {
-          return;
-        }
-        return response.json();
-      }).then(function (data) {
-        if (!data) return;
-        data = _lodash2.default.filter(data, { excluded: '0' });
-        if (_this2.props.listingType === 'events') {
-          cities = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
-            return { name: listing.city[0] };
-          }), 'name');
-          data = _lodash2.default.filter(data, function (listing) {
-            if ((0, _moment2.default)(listing.endDate).isSameOrAfter((0, _moment2.default)(), 'day')) return listing;
-          });
-          data = _lodash2.default.orderBy(data, 'startDate', 'asc');
-          months = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
-            return { name: listing.month[0], date: listing.startDate };
-          }), 'name');
-          months = _lodash2.default.orderBy(months, function (month) {
-            return new _moment2.default(month.date);
-          }, 'asc');
-        } else {
-          data = _lodash2.default.shuffle(data);
-          data = _lodash2.default.orderBy(data, 'featured', 'desc');
-        }
-        _this2.setState({
-          allListings: data,
-          listings: data.slice(0, 24),
-          cities: cities,
-          months: months,
-          sortedListings: data,
-          loading: false
+      if (this.props.listingType === 'events') {
+        cities = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
+          return { name: listing.city[0] };
+        }), 'name');
+        data = _lodash2.default.filter(data, function (listing) {
+          if ((0, _moment2.default)(listing.endDate).isSameOrAfter((0, _moment2.default)(), 'day')) return listing;
         });
-      }).then(function () {
-        if (_this2.state.filterMap['categories'] === undefined && _this2.state.categories && _this2.state.categories !== '') {
-          _this2.filterSelect({ categories: _this2.state.categories });
-        }
+        data = _lodash2.default.orderBy(data, 'startDate', 'asc');
+        months = _lodash2.default.uniqBy(_lodash2.default.map(data, function (listing) {
+          return { name: listing.month[0], date: listing.startDate };
+        }), 'name');
+        months = _lodash2.default.orderBy(months, function (month) {
+          return new _moment2.default(month.date);
+        }, 'asc');
+      } else {
+        data = _lodash2.default.shuffle(data);
+        data = _lodash2.default.orderBy(data, 'featured', 'desc');
+      }
+      this.setState({
+        listings: data.slice(0, 24),
+        cities: cities,
+        months: months,
+        sortedListings: data,
+        loading: false
       });
+      if (this.state.filterMap['categories'] === undefined && this.state.categories && this.state.categories !== '') {
+        this.filterSelect({ categories: this.state.categories });
+      }
     }
   }, {
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      this.getPage();
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(newProps) {
+      if (this.props.allListings !== newProps.allListings) {
+        console.log('loaded listings');
+        this.getPage();
+      }
     }
   }, {
     key: 'lazyLoad',
@@ -134,20 +124,23 @@ var CardList = function (_Component) {
       if (this.state.sortedListings.length > 24 && isVisible) {
         var newOffset = this.state.offset + 24;
         var nextListings = this.state.sortedListings.slice(this.state.offset, newOffset);
-        this.setState({ offset: newOffset, listings: this.state.listings.concat(nextListings) });
+        this.setState({
+          offset: newOffset,
+          listings: this.state.listings.concat(nextListings)
+        });
       }
     }
   }, {
     key: 'filterSelect',
     value: function filterSelect(filterMap) {
-      var _this3 = this;
+      var _this2 = this;
 
       this.setState({
         filterMap: filterMap
       }, function () {
-        var listings = _this3.state.allListings;
-        if (!_lodash2.default.isEmpty(_this3.state.filterMap)) {
-          var filters = _this3.state.filterMap;
+        var listings = _this2.props.allListings;
+        if (!_lodash2.default.isEmpty(_this2.state.filterMap)) {
+          var filters = _this2.state.filterMap;
           // console.log(filters);
 
           var _loop = function _loop(k) {
@@ -176,7 +169,7 @@ var CardList = function (_Component) {
             _loop(k);
           }
         }
-        _this3.setState({
+        _this2.setState({
           offset: 24,
           listings: listings.slice(0, 24),
           sortedListings: listings
@@ -186,14 +179,17 @@ var CardList = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
+      var _this3 = this;
 
       var listingData = this.state.listings;
       // console.log(listingData);
       return _react2.default.createElement(
         'div',
         { className: 'listings-page wrapper', style: { paddingBottom: '20px' } },
-        _react2.default.createElement('div', { className: 'loading-overlay', style: { display: this.state.loading ? 'block' : 'none' } }),
+        _react2.default.createElement('div', {
+          className: 'loading-overlay',
+          style: { display: this.state.loading ? 'block' : 'none' }
+        }),
         _react2.default.createElement(_FilterBar2.default, {
           filterSelect: this.filterSelect,
           listingType: this.props.listingType,
@@ -209,14 +205,25 @@ var CardList = function (_Component) {
             'div',
             { className: 'listings' },
             listingData.length ? listingData.map(function (listing, i) {
-              return _react2.default.createElement(_Card2.default, { listing: listing, key: i, listingType: _this4.props.listingType });
+              return _react2.default.createElement(_Card2.default, {
+                listing: listing,
+                key: i,
+                listingType: _this3.props.listingType
+              });
             }) : null
           ),
-          _react2.default.createElement(_reactVisibilitySensor2.default, { onChange: this.lazyLoad, delayedCall: true, partialVisibility: true })
+          _react2.default.createElement(_reactVisibilitySensor2.default, {
+            onChange: this.lazyLoad,
+            delayedCall: true,
+            partialVisibility: true
+          })
         ),
         listingData.length === 0 ? _react2.default.createElement(
           'div',
-          { style: { display: this.state.loading ? 'none' : 'block' }, className: 'no-results' },
+          {
+            style: { display: this.state.loading ? 'none' : 'block' },
+            className: 'no-results'
+          },
           'No results found.'
         ) : null
       );
@@ -234,4 +241,8 @@ CardList.defaultProps = {
   filterSelect: function filterSelect() {}
 };
 
-exports.default = CardList;
+exports.default = (0, _reactRedux.connect)(function (state, props) {
+  return {
+    allListings: state.listings
+  };
+})(CardList);
