@@ -6,7 +6,6 @@ import FilterBar from './FilterBar'
 import { polyfill } from 'es6-promise'
 import 'isomorphic-fetch'
 import _ from 'lodash'
-import moment from 'moment'
 import Visible from 'react-visibility-sensor'
 
 class CardList extends Component {
@@ -117,8 +116,6 @@ class CardList extends Component {
           listingType={this.props.listingType}
           themeURL={this.props.themeURL}
           categories={this.state.categories}
-          cities={this.props.filters.cities}
-          months={this.props.filters.months}
         />
         <div className="row">
           <div className="listings">
@@ -162,7 +159,6 @@ CardList.defaultProps = {
 function mapStateToProps(state, ownProps) {
   return {
     allListings: state.listings,
-    filters: state.filters,
   }
 }
 

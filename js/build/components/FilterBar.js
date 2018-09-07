@@ -40,8 +40,7 @@ var FilterBar = function (_Component) {
 
     _this.state = {
       filterMap: {},
-      openFilters: false,
-      cities: _this.props.cities
+      openFilters: false
     };
     if (_this.props.categories) {
       _this.state.filterMap['categories'] = _this.props.categories;
@@ -53,14 +52,6 @@ var FilterBar = function (_Component) {
   }
 
   _createClass(FilterBar, [{
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      this.setState({
-        cities: nextProps.cities,
-        months: nextProps.months
-      });
-    }
-  }, {
     key: 'handleFilterClick',
     value: function handleFilterClick() {
       this.setState({ openFilters: true });
@@ -68,12 +59,10 @@ var FilterBar = function (_Component) {
   }, {
     key: 'handleFilterSelect',
     value: function handleFilterSelect(type, value) {
-      // console.log('filterbar', type, value);
       var filterMap = this.state.filterMap;
       filterMap[type] = value;
       if (type === 'categories') {
         window.location.hash = value ? value : '';
-        console.log(value);
       }
       filterMap = _lodash2.default.pickBy(filterMap, _lodash2.default.identity);
       this.setState({ filterMap: filterMap });
@@ -87,22 +76,32 @@ var FilterBar = function (_Component) {
         { className: 'listing-filters' },
         _react2.default.createElement(
           'div',
-          { className: 'row', style: { display: this.state.openFilters ? 'none' : '' } },
+          {
+            className: 'row',
+            style: { display: this.state.openFilters ? 'none' : '' }
+          },
           _react2.default.createElement(
             'div',
-            { className: 'col-sm-12 filter-listings', onClick: this.handleFilterClick },
+            {
+              className: 'col-sm-12 filter-listings',
+              onClick: this.handleFilterClick
+            },
             _react2.default.createElement(
               'h6',
               null,
               _react2.default.createElement('i', { className: 'fas fa-sliders-h slider' }),
-              ' Filter Listings ',
+              ' Filter Listings',
+              ' ',
               _react2.default.createElement('i', { className: 'icon_menu_expand' })
             )
           )
         ),
         this.props.listingType != 'events' ? _react2.default.createElement(
           'div',
-          { className: 'row hide', style: { display: this.state.openFilters ? 'block' : '' } },
+          {
+            className: 'row hide',
+            style: { display: this.state.openFilters ? 'block' : '' }
+          },
           _react2.default.createElement(
             'div',
             { className: 'category-filter filter-box col-md-3' },
@@ -153,7 +152,10 @@ var FilterBar = function (_Component) {
           )
         ) : _react2.default.createElement(
           'div',
-          { className: 'row hide', style: { display: this.state.openFilters ? 'block' : '' } },
+          {
+            className: 'row hide',
+            style: { display: this.state.openFilters ? 'block' : '' }
+          },
           _react2.default.createElement(
             'div',
             { className: 'category-filter filter-box col-md-3' },
@@ -165,10 +167,9 @@ var FilterBar = function (_Component) {
             _react2.default.createElement(_Filter2.default, {
               listingType: this.props.listingType,
               themeURL: this.props.themeURL,
-              type: 'city',
+              type: 'cities',
               filterSelect: this.handleFilterSelect,
-              selectedOption: this.props.categories,
-              cities: this.state.cities
+              selectedOption: this.props.categories
             })
           ),
           _react2.default.createElement(
@@ -182,9 +183,8 @@ var FilterBar = function (_Component) {
             _react2.default.createElement(_Filter2.default, {
               listingType: this.props.listingType,
               themeURL: this.props.themeURL,
-              type: 'month',
-              filterSelect: this.handleFilterSelect,
-              months: this.state.months
+              type: 'months',
+              filterSelect: this.handleFilterSelect
             })
           ),
           _react2.default.createElement(
@@ -217,9 +217,7 @@ FilterBar.propTypes = {
 };
 
 FilterBar.defaultProps = {
-  filterSelect: function filterSelect(type, value) {
-    // console.log('filterbar default', type, value);
-  }
+  filterSelect: function filterSelect(type, value) {}
 };
 
 exports.default = FilterBar;

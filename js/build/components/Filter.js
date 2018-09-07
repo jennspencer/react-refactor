@@ -18,6 +18,8 @@ var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
 
+var _reactRedux = require('react-redux');
+
 var _es6Promise = require('es6-promise');
 
 require('isomorphic-fetch');
@@ -43,9 +45,7 @@ var Filter = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this, props));
 
     _this.state = {
-      value: _this.props.selectedOption ? _this.props.selectedOption : '',
-      dataRoute: _this.props.themeURL + '/wp-json/wp/v2/' + _this.props.listingType,
-      options: []
+      value: _this.props.selectedOption ? _this.props.selectedOption : ''
     };
 
     _this.handleSelectChange = _this.handleSelectChange.bind(_this);
@@ -53,68 +53,8 @@ var Filter = function (_Component) {
   }
 
   _createClass(Filter, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      if (!['sort', 'city', 'month'].includes(this.props.type)) {
-        fetch(this.state.dataRoute + '-' + this.props.type + '?hide_empty=true&per_page=100').then(function (res) {
-          return res.json();
-        }).then(function (options) {
-          return _this2.setState(function (prevState, props) {
-            return { options: options.map(_this2.mapTags) };
-          });
-        });
-      } else {
-        var alphaOptions = [{ value: 'asc', label: 'Alphabetical A-Z' }, { value: 'desc', label: 'Alphabetical Z-A' }];
-        this.setState({
-          options: alphaOptions
-        });
-        if (['stay', 'dine'].includes(this.props.listingType)) {
-          fetch(this.state.dataRoute + '-price?hide_empty=true').then(function (res) {
-            return res.json();
-          }).then(function (options) {
-            return _this2.setState(function (prevState, props) {
-              return { options: alphaOptions.concat(options.map(_this2.mapOptions)) };
-            });
-          });
-        }
-      }
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      if (this.props.type === 'city') {
-        this.setState({
-          options: nextProps.cities.map(this.mapOptions)
-        });
-      }
-      if (this.props.type === 'month') {
-        this.setState({
-          options: nextProps.months.map(this.mapOptions)
-        });
-      }
-    }
-  }, {
-    key: 'mapTags',
-    value: function mapTags(option) {
-      return {
-        value: option.slug,
-        label: option.name.replace('&amp;', '&', option.name)
-      };
-    }
-  }, {
-    key: 'mapOptions',
-    value: function mapOptions(option) {
-      return {
-        value: option.name,
-        label: option.name
-      };
-    }
-  }, {
     key: 'handleSelectChange',
     value: function handleSelectChange(value) {
-      // console.log("You've selected:", this.props.type, value);
       this.setState({ value: value });
       this.props.filterSelect(this.props.type, value);
     }
@@ -131,7 +71,7 @@ var Filter = function (_Component) {
           simpleValue: true,
           value: value,
           onChange: this.handleSelectChange,
-          options: this.state.options,
+          options: this.props.options,
           multi: this.props.multi ? this.props.multi : false,
           removeSelected: this.props.removeSelected ? this.props.removeSelected : false
         })
@@ -152,4 +92,8 @@ Filter.defaultProps = {
   }
 };
 
-exports.default = Filter;
+function mapStateToProps(state, ownProps) {
+  return { options: state.filters[ownProps.type] };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps)(Filter);

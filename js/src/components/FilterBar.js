@@ -1,60 +1,60 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import Filter from './Filter';
-import _ from 'lodash';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import Filter from './Filter'
+import _ from 'lodash'
 
 class FilterBar extends Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       filterMap: {},
       openFilters: false,
-      cities: this.props.cities
-    };
+    }
     if (this.props.categories) {
-      this.state.filterMap['categories'] = this.props.categories;
+      this.state.filterMap['categories'] = this.props.categories
     }
 
-    this.handleFilterSelect = this.handleFilterSelect.bind(this);
-    this.handleFilterClick = this.handleFilterClick.bind(this);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      cities: nextProps.cities,
-      months: nextProps.months
-    });
+    this.handleFilterSelect = this.handleFilterSelect.bind(this)
+    this.handleFilterClick = this.handleFilterClick.bind(this)
   }
 
   handleFilterClick() {
-    this.setState({ openFilters: true });
+    this.setState({ openFilters: true })
   }
 
   handleFilterSelect(type, value) {
-    // console.log('filterbar', type, value);
-    let filterMap = this.state.filterMap;
-    filterMap[type] = value;
+    let filterMap = this.state.filterMap
+    filterMap[type] = value
     if (type === 'categories') {
-      window.location.hash = value ? value : '';
-      console.log(value);
+      window.location.hash = value ? value : ''
     }
-    filterMap = _.pickBy(filterMap, _.identity);
-    this.setState({ filterMap });
-    this.props.filterSelect(filterMap);
+    filterMap = _.pickBy(filterMap, _.identity)
+    this.setState({ filterMap })
+    this.props.filterSelect(filterMap)
   }
 
   render() {
     return (
       <section className="listing-filters">
-        <div className="row" style={{ display: this.state.openFilters ? 'none' : '' }}>
-          <div className="col-sm-12 filter-listings" onClick={this.handleFilterClick}>
+        <div
+          className="row"
+          style={{ display: this.state.openFilters ? 'none' : '' }}
+        >
+          <div
+            className="col-sm-12 filter-listings"
+            onClick={this.handleFilterClick}
+          >
             <h6>
-              <i className="fas fa-sliders-h slider" /> Filter Listings <i className="icon_menu_expand" />
+              <i className="fas fa-sliders-h slider" /> Filter Listings{' '}
+              <i className="icon_menu_expand" />
             </h6>
           </div>
         </div>
         {this.props.listingType != 'events' ? (
-          <div className="row hide" style={{ display: this.state.openFilters ? 'block' : '' }}>
+          <div
+            className="row hide"
+            style={{ display: this.state.openFilters ? 'block' : '' }}
+          >
             <div className="category-filter filter-box col-md-3">
               <h6>Category</h6>
               <Filter
@@ -87,16 +87,18 @@ class FilterBar extends Component {
             </div>
           </div>
         ) : (
-          <div className="row hide" style={{ display: this.state.openFilters ? 'block' : '' }}>
+          <div
+            className="row hide"
+            style={{ display: this.state.openFilters ? 'block' : '' }}
+          >
             <div className="category-filter filter-box col-md-3">
               <h6>Location</h6>
               <Filter
                 listingType={this.props.listingType}
                 themeURL={this.props.themeURL}
-                type="city"
+                type="cities"
                 filterSelect={this.handleFilterSelect}
                 selectedOption={this.props.categories}
-                cities={this.state.cities}
               />
             </div>
             <div className="price-filter filter-box col-md-3">
@@ -104,9 +106,8 @@ class FilterBar extends Component {
               <Filter
                 listingType={this.props.listingType}
                 themeURL={this.props.themeURL}
-                type="month"
+                type="months"
                 filterSelect={this.handleFilterSelect}
-                months={this.state.months}
               />
             </div>
             <div className="tag-filter filter-box col-md-6">
@@ -123,18 +124,16 @@ class FilterBar extends Component {
           </div>
         )}
       </section>
-    );
+    )
   }
 }
 
 FilterBar.propTypes = {
-  filterSelect: PropTypes.func
-};
+  filterSelect: PropTypes.func,
+}
 
 FilterBar.defaultProps = {
-  filterSelect: (type, value) => {
-    // console.log('filterbar default', type, value);
-  }
-};
+  filterSelect: (type, value) => {},
+}
 
-export default FilterBar;
+export default FilterBar

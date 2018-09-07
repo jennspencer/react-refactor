@@ -16,6 +16,8 @@ var _configureStore2 = _interopRequireDefault(_configureStore);
 
 var _listingActions = require('./actions/listingActions');
 
+var _filterActions = require('./actions/filterActions');
+
 var _CardList = require('./components/CardList');
 
 var _CardList2 = _interopRequireDefault(_CardList);
@@ -27,6 +29,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var store = (0, _configureStore2.default)();
 
 store.dispatch((0, _listingActions.fetchAllListings)(_constants.listingType));
+store.dispatch((0, _filterActions.fetchAllFilters)(_constants.listingType));
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactRedux.Provider,

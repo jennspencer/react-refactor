@@ -32,10 +32,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 var _reactVisibilitySensor = require('react-visibility-sensor');
 
 var _reactVisibilitySensor2 = _interopRequireDefault(_reactVisibilitySensor);
@@ -166,9 +162,7 @@ var CardList = function (_Component) {
           filterSelect: this.filterSelect,
           listingType: this.props.listingType,
           themeURL: this.props.themeURL,
-          categories: this.state.categories,
-          cities: this.props.filters.cities,
-          months: this.props.filters.months
+          categories: this.state.categories
         }),
         _react2.default.createElement(
           'div',
@@ -215,8 +209,7 @@ CardList.defaultProps = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    allListings: state.listings,
-    filters: state.filters
+    allListings: state.listings
   };
 }
 

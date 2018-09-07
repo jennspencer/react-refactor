@@ -1,10 +1,10 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
 import moment from 'moment'
-import { themeURL, listingType, apiURL } from '../constants'
+import { themeURL, listingType, customApiURL } from '../constants'
 import { getEventFilters } from './filterActions'
 
-const dataRoute = themeURL + apiURL
+const dataRoute = themeURL + customApiURL
 
 export function fetchAllListings(type) {
   return dispatch => {

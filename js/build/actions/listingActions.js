@@ -21,7 +21,7 @@ var _filterActions = require('./filterActions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dataRoute = _constants.themeURL + _constants.apiURL;
+var dataRoute = _constants.themeURL + _constants.customApiURL;
 
 function fetchAllListings(type) {
   return function (dispatch) {

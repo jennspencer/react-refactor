@@ -25,6 +25,12 @@ function filterReducer() {
       return _extends({}, state, { cities: action.data });
     case _actionTypes.ActionTypes.GET_MONTHS_FILTER:
       return _extends({}, state, { months: action.data });
+    case _actionTypes.ActionTypes.RECEIVED_CATEGORIES_SUCCESS:
+      return _extends({}, state, { categories: action.data });
+    case _actionTypes.ActionTypes.RECEIVED_AMENITIES_SUCCESS:
+      return _extends({}, state, { amenities: action.data });
+    case _actionTypes.ActionTypes.RECEIVED_PRICES_SUCCESS:
+      return _extends({}, state, { sort: state.sort.concat(action.data) });
     default:
       return state;
   }

@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.fetchAllFilters = fetchAllFilters;
 exports.getEventFilters = getEventFilters;
 
 var _actionTypes = require('../actions/actionTypes');
@@ -15,7 +16,19 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _constants = require('../constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var dataRoute = _constants.themeURL + _constants.wpApiUrl;
+
+function fetchAllFilters() {
+  return function (dispatch) {
+    requestAllCategories(dispatch, _constants.listingType);
+    requestAllAmenities(dispatch, _constants.listingType);
+    requestAllPrices(dispatch, _constants.listingType);
+  };
+}
 
 function getEventFilters(listings) {
   var cities = [];
@@ -32,7 +45,76 @@ function getEventFilters(listings) {
     return new _moment2.default(month.date);
   }, 'asc');
   return function (dispatch) {
-    dispatch({ type: _actionTypes.ActionTypes.GET_CITIES_FILTER, data: cities });
-    dispatch({ type: _actionTypes.ActionTypes.GET_MONTHS_FILTER, data: months });
+    dispatch({ type: _actionTypes.ActionTypes.GET_MONTHS_FILTER, data: months.map(mapOptions) });
+    dispatch({ type: _actionTypes.ActionTypes.GET_CITIES_FILTER, data: cities.map(mapOptions) });
+  };
+}
+
+function requestAllCategories(dispatch, type) {
+  dispatch({ type: _actionTypes.ActionTypes.REQUEST_CATEGORIES, data: type });
+  var url = dataRoute + type + '-categories?hide_empty=true&per_page=100';
+  fetch(url).catch(function (error) {
+    console.error('Error fetching API page', error);
+  }).then(function (response) {
+    if (response.status !== 200) {
+      return;
+    }
+    return response.json();
+  }).then(function (options) {
+    dispatch({
+      type: _actionTypes.ActionTypes.RECEIVED_CATEGORIES_SUCCESS,
+      data: options.map(mapTags)
+    });
+  });
+}
+
+function requestAllAmenities(dispatch, type) {
+  dispatch({ type: _actionTypes.ActionTypes.REQUEST_AMENITIES, data: type });
+  var url = dataRoute + type + '-amenities?hide_empty=true&per_page=100';
+  fetch(url).catch(function (error) {
+    console.error('Error fetching API page', error);
+  }).then(function (response) {
+    if (response.status !== 200) {
+      return;
+    }
+    return response.json();
+  }).then(function (options) {
+    dispatch({
+      type: _actionTypes.ActionTypes.RECEIVED_AMENITIES_SUCCESS,
+      data: options.map(mapTags)
+    });
+  });
+}
+
+function requestAllPrices(dispatch, type) {
+  dispatch({ type: _actionTypes.ActionTypes.REQUEST_PRICES, data: type });
+  var url = dataRoute + type + '-price?hide_empty=true&per_page=100';
+
+  fetch(url).catch(function (error) {
+    console.error('Error fetching API page', error);
+  }).then(function (response) {
+    if (response.status !== 200) {
+      return;
+    }
+    return response.json();
+  }).then(function (options) {
+    dispatch({
+      type: _actionTypes.ActionTypes.RECEIVED_PRICES_SUCCESS,
+      data: options.map(mapOptions)
+    });
+  });
+}
+
+function mapTags(option) {
+  return {
+    value: option.slug,
+    label: option.name.replace('&amp;', '&', option.name)
+  };
+}
+
+function mapOptions(option) {
+  return {
+    value: option.name,
+    label: option.name
   };
 }
