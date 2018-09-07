@@ -10,7 +10,7 @@ const Card = props => {
     overlayDate,
     niceDate,
     title,
-    price,
+    priceDisplay,
     listingAddress,
     address1,
     address2,
@@ -45,7 +45,11 @@ const Card = props => {
         <div className="card-title">
           <span className="card-date">{niceDate}</span>
           <h4 itemProp="name" dangerouslySetInnerHTML={{ __html: title }} />
-          {price ? <span className="price-rating">{price}</span> : ''}
+          {priceDisplay ? (
+            <span className="price-rating">{priceDisplay}</span>
+          ) : (
+            ''
+          )}
         </div>
         <div className="card-details">
           <div

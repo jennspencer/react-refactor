@@ -24,7 +24,7 @@ var Card = function Card(props) {
       overlayDate = _props$listing.overlayDate,
       niceDate = _props$listing.niceDate,
       title = _props$listing.title,
-      price = _props$listing.price,
+      priceDisplay = _props$listing.priceDisplay,
       listingAddress = _props$listing.listingAddress,
       address1 = _props$listing.address1,
       address2 = _props$listing.address2,
@@ -69,10 +69,10 @@ var Card = function Card(props) {
           niceDate
         ),
         _react2.default.createElement('h4', { itemProp: 'name', dangerouslySetInnerHTML: { __html: title } }),
-        price ? _react2.default.createElement(
+        priceDisplay ? _react2.default.createElement(
           'span',
           { className: 'price-rating' },
-          price
+          priceDisplay
         ) : ''
       ),
       _react2.default.createElement(

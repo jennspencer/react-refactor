@@ -4,8 +4,8 @@ export default {
     amenities: [],
     categories: [],
     sort: [
-      { value: 'asc', label: 'Alphabetical A-Z' },
-      { value: 'desc', label: 'Alphabetical Z-A' },
+      { value: 'title-asc', label: 'Alphabetical A-Z' },
+      { value: 'title-desc', label: 'Alphabetical Z-A' },
     ],
     cities: [],
     months: [],

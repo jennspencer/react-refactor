@@ -123,9 +123,10 @@ var CardList = function (_Component) {
                 listings = filteredListings;
               }
               if (k === 'sort') {
-                if (filters[k] === 'desc' || filters[k] === 'asc') {
-                  listings = _lodash2.default.orderBy(listings, 'title', [filters[k]]);
-                } else if (filters[k] && filters[k] !== '') {
+                if (filters[k].length > 1) {
+                  var sorting = filters[k].split('-');
+                  listings = _lodash2.default.orderBy(listings, sorting[0], sorting[1]);
+                } else {
                   listings = _lodash2.default.filter(listings, { price: filters[k] });
                 }
               }

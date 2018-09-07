@@ -8,7 +8,7 @@ exports.default = {
   filters: {
     amenities: [],
     categories: [],
-    sort: [{ value: 'asc', label: 'Alphabetical A-Z' }, { value: 'desc', label: 'Alphabetical Z-A' }],
+    sort: [{ value: 'title-asc', label: 'Alphabetical A-Z' }, { value: 'title-desc', label: 'Alphabetical Z-A' }],
     cities: [],
     months: []
   }

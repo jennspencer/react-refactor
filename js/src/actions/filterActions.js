@@ -103,9 +103,22 @@ function requestAllPrices(dispatch, type) {
       return response.json()
     })
     .then(options => {
+      options = options.map(option => {
+        let value = option.name.length
+        return {
+          value,
+          label: option.name,
+        }
+      })
+
+      options = [
+        { value: 'price-asc', label: 'Price Low to High' },
+        { value: 'price-desc', label: 'Price High to Low' },
+      ].concat(options)
+
       dispatch({
         type: types.RECEIVED_PRICES_SUCCESS,
-        data: options.map(mapOptions),
+        data: options,
       })
     })
 }

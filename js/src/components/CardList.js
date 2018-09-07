@@ -84,9 +84,10 @@ class CardList extends Component {
                 listings = filteredListings
               }
               if (k === 'sort') {
-                if (filters[k] === 'desc' || filters[k] === 'asc') {
-                  listings = _.orderBy(listings, 'title', [filters[k]])
-                } else if (filters[k] && filters[k] !== '') {
+                if (filters[k].length > 1) {
+                  let sorting = filters[k].split('-')
+                  listings = _.orderBy(listings, sorting[0], sorting[1])
+                } else {
                   listings = _.filter(listings, { price: filters[k] })
                 }
               }

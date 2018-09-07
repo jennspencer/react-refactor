@@ -53,10 +53,9 @@ function requestAllListings(dispatch) {
 }
 
 function normalizeListings(listings) {
-  let postType = LISTING_TYPE
   let placeType = 'Place'
 
-  switch (postType) {
+  switch (LISTING_TYPE) {
     case 'dine':
       placeType = 'FoodEstablishment'
       break
@@ -85,36 +84,41 @@ function normalizeListings(listings) {
       ' OR ' +
       (listing.zipcode ? listing.zipcode : '')
 
-    // add 'cities' key to make filtering more sane
-    listing.cities = listing.city
+    listing.priceDisplay = listing.price
+    listing.price = listing.price.length
 
-    if (listing.startDate) {
-      listing.startDate = moment(listing.startDate.toString()).format(
-        'dddd, MMMM D, YYYY',
-      )
-      listing.overlayStartDate = moment(listing.startDate.toString()).format(
-        'MMM DD',
-      )
+    if (LISTING_TYPE === 'events') {
+      // add 'cities' key to make filtering more sane
+      listing.cities = listing.city
+
+      if (listing.startDate) {
+        listing.startDate = moment(listing.startDate.toString()).format(
+          'dddd, MMMM D, YYYY',
+        )
+        listing.overlayStartDate = moment(listing.startDate.toString()).format(
+          'MMM DD',
+        )
+      }
+
+      if (listing.endDate) {
+        listing.endDate = moment(listing.endDate.toString()).format(
+          'dddd, MMMM D, YYYY',
+        )
+        listing.overlayEndDate = moment(listing.endDate.toString()).format(
+          'MMM DD',
+        )
+      }
+
+      listing.niceDate =
+        listing.startDate === listing.endDate
+          ? listing.startDate
+          : listing.startDate + ' - ' + listing.endDate
+
+      listing.overlayDate =
+        listing.startDate === listing.endDate
+          ? listing.overlayStartDate
+          : listing.overlayStartDate + ' - ' + listing.overlayEndDate
     }
-
-    if (listing.endDate) {
-      listing.endDate = moment(listing.endDate.toString()).format(
-        'dddd, MMMM D, YYYY',
-      )
-      listing.overlayEndDate = moment(listing.endDate.toString()).format(
-        'MMM DD',
-      )
-    }
-
-    listing.niceDate =
-      listing.startDate === listing.endDate
-        ? listing.startDate
-        : listing.startDate + ' - ' + listing.endDate
-
-    listing.overlayDate =
-      listing.startDate === listing.endDate
-        ? listing.overlayStartDate
-        : listing.overlayStartDate + ' - ' + listing.overlayEndDate
 
     let description = listing.description.split(' ')
     listing.longDesc = false

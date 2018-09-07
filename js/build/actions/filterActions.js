@@ -101,9 +101,19 @@ function requestAllPrices(dispatch, type) {
     }
     return response.json();
   }).then(function (options) {
+    options = options.map(function (option) {
+      var value = option.name.length;
+      return {
+        value: value,
+        label: option.name
+      };
+    });
+
+    options = [{ value: 'price-asc', label: 'Price Low to High' }, { value: 'price-desc', label: 'Price High to Low' }].concat(options);
+
     dispatch({
       type: _actionTypes.ActionTypes.RECEIVED_PRICES_SUCCESS,
-      data: options.map(mapOptions)
+      data: options
     });
   });
 }
