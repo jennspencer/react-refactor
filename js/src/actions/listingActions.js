@@ -85,6 +85,9 @@ function normalizeListings(listings) {
       ' OR ' +
       (listing.zipcode ? listing.zipcode : '')
 
+    // add 'cities' key to make filtering more sane
+    listing.cities = listing.city
+
     if (listing.startDate) {
       listing.startDate = moment(listing.startDate.toString()).format(
         'dddd, MMMM D, YYYY',

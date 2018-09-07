@@ -150,10 +150,7 @@ var CardList = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'listings-page wrapper', style: { paddingBottom: '20px' } },
-        _react2.default.createElement('div', {
-          className: 'loading-overlay',
-          style: { display: this.state.loading ? 'block' : 'none' }
-        }),
+        this.state.loading ? _react2.default.createElement('div', { className: 'loading-overlay' }) : '',
         _react2.default.createElement(_FilterBar2.default, {
           filterSelect: this.filterSelect,
           categories: this.state.categories

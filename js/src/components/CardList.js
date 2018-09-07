@@ -106,10 +106,8 @@ class CardList extends Component {
     let listingData = this.state.listings
     return (
       <div className="listings-page wrapper" style={{ paddingBottom: '20px' }}>
-        <div
-          className="loading-overlay"
-          style={{ display: this.state.loading ? 'block' : 'none' }}
-        />
+        {this.state.loading ? <div className="loading-overlay" /> : ''}
+
         <FilterBar
           filterSelect={this.filterSelect}
           categories={this.state.categories}

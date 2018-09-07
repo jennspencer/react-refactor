@@ -35,6 +35,20 @@ class FilterBar extends Component {
   }
 
   render() {
+    let categoryTitle, categoryType, sortTitle, sortType
+
+    if (LISTING_TYPE !== 'events') {
+      categoryTitle = 'Category'
+      categoryType = 'categories'
+      sortTitle = 'Sort'
+      sortType = 'sort'
+    } else {
+      categoryTitle = 'Location'
+      categoryType = 'cities'
+      sortTitle = 'Date'
+      sortType = 'months'
+    }
+
     return (
       <section className="listing-filters">
         <div
@@ -51,61 +65,35 @@ class FilterBar extends Component {
             </h6>
           </div>
         </div>
-        {LISTING_TYPE != 'events' ? (
-          <div
-            className="row hide"
-            style={{ display: this.state.openFilters ? 'block' : '' }}
-          >
-            <div className="category-filter filter-box col-md-3">
-              <h6>Category</h6>
-              <Filter
-                type="categories"
-                filterSelect={this.handleFilterSelect}
-                selectedOption={this.props.categories}
-              />
-            </div>
-            <div className="price-filter filter-box col-md-3">
-              <h6>Sort</h6>
-              <Filter type="sort" filterSelect={this.handleFilterSelect} />
-            </div>
-            <div className="tag-filter filter-box col-md-6">
-              <h6>Filters</h6>
-              <Filter
-                type="amenities"
-                multi={true}
-                removeSelected={true}
-                filterSelect={this.handleFilterSelect}
-              />
-            </div>
+
+        <div
+          className="row hide"
+          style={{ display: this.state.openFilters ? 'block' : '' }}
+        >
+          <div className="category-filter filter-box col-md-3">
+            <h6>{categoryTitle}</h6>
+            <Filter
+              type={categoryType}
+              filterSelect={this.handleFilterSelect}
+              selectedOption={this.props.categories}
+            />
           </div>
-        ) : (
-          <div
-            className="row hide"
-            style={{ display: this.state.openFilters ? 'block' : '' }}
-          >
-            <div className="category-filter filter-box col-md-3">
-              <h6>Location</h6>
-              <Filter
-                type="cities"
-                filterSelect={this.handleFilterSelect}
-                selectedOption={this.props.categories}
-              />
-            </div>
-            <div className="price-filter filter-box col-md-3">
-              <h6>Date</h6>
-              <Filter type="months" filterSelect={this.handleFilterSelect} />
-            </div>
-            <div className="tag-filter filter-box col-md-6">
-              <h6>Filters</h6>
-              <Filter
-                type="amenities"
-                multi={true}
-                removeSelected={true}
-                filterSelect={this.handleFilterSelect}
-              />
-            </div>
+
+          <div className="price-filter filter-box col-md-3">
+            <h6>{sortTitle}</h6>
+            <Filter type={sortType} filterSelect={this.handleFilterSelect} />
           </div>
-        )}
+
+          <div className="tag-filter filter-box col-md-6">
+            <h6>Filters</h6>
+            <Filter
+              type="amenities"
+              multi={true}
+              removeSelected={true}
+              filterSelect={this.handleFilterSelect}
+            />
+          </div>
+        </div>
       </section>
     )
   }

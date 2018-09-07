@@ -73,6 +73,23 @@ var FilterBar = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
+      var categoryTitle = void 0,
+          categoryType = void 0,
+          sortTitle = void 0,
+          sortType = void 0;
+
+      if (_constants.LISTING_TYPE !== 'events') {
+        categoryTitle = 'Category';
+        categoryType = 'categories';
+        sortTitle = 'Sort';
+        sortType = 'sort';
+      } else {
+        categoryTitle = 'Location';
+        categoryType = 'cities';
+        sortTitle = 'Date';
+        sortType = 'months';
+      }
+
       return _react2.default.createElement(
         'section',
         { className: 'listing-filters' },
@@ -98,7 +115,7 @@ var FilterBar = function (_Component) {
             )
           )
         ),
-        _constants.LISTING_TYPE != 'events' ? _react2.default.createElement(
+        _react2.default.createElement(
           'div',
           {
             className: 'row hide',
@@ -110,10 +127,10 @@ var FilterBar = function (_Component) {
             _react2.default.createElement(
               'h6',
               null,
-              'Category'
+              categoryTitle
             ),
             _react2.default.createElement(_Filter2.default, {
-              type: 'categories',
+              type: categoryType,
               filterSelect: this.handleFilterSelect,
               selectedOption: this.props.categories
             })
@@ -124,54 +141,9 @@ var FilterBar = function (_Component) {
             _react2.default.createElement(
               'h6',
               null,
-              'Sort'
+              sortTitle
             ),
-            _react2.default.createElement(_Filter2.default, { type: 'sort', filterSelect: this.handleFilterSelect })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'tag-filter filter-box col-md-6' },
-            _react2.default.createElement(
-              'h6',
-              null,
-              'Filters'
-            ),
-            _react2.default.createElement(_Filter2.default, {
-              type: 'amenities',
-              multi: true,
-              removeSelected: true,
-              filterSelect: this.handleFilterSelect
-            })
-          )
-        ) : _react2.default.createElement(
-          'div',
-          {
-            className: 'row hide',
-            style: { display: this.state.openFilters ? 'block' : '' }
-          },
-          _react2.default.createElement(
-            'div',
-            { className: 'category-filter filter-box col-md-3' },
-            _react2.default.createElement(
-              'h6',
-              null,
-              'Location'
-            ),
-            _react2.default.createElement(_Filter2.default, {
-              type: 'cities',
-              filterSelect: this.handleFilterSelect,
-              selectedOption: this.props.categories
-            })
-          ),
-          _react2.default.createElement(
-            'div',
-            { className: 'price-filter filter-box col-md-3' },
-            _react2.default.createElement(
-              'h6',
-              null,
-              'Date'
-            ),
-            _react2.default.createElement(_Filter2.default, { type: 'months', filterSelect: this.handleFilterSelect })
+            _react2.default.createElement(_Filter2.default, { type: sortType, filterSelect: this.handleFilterSelect })
           ),
           _react2.default.createElement(
             'div',
