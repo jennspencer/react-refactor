@@ -58,8 +58,6 @@ class FilterBar extends Component {
             <div className="category-filter filter-box col-md-3">
               <h6>Category</h6>
               <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
                 type="categories"
                 filterSelect={this.handleFilterSelect}
                 selectedOption={this.props.categories}
@@ -67,18 +65,11 @@ class FilterBar extends Component {
             </div>
             <div className="price-filter filter-box col-md-3">
               <h6>Sort</h6>
-              <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
-                type="sort"
-                filterSelect={this.handleFilterSelect}
-              />
+              <Filter type="sort" filterSelect={this.handleFilterSelect} />
             </div>
             <div className="tag-filter filter-box col-md-6">
               <h6>Filters</h6>
               <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
                 type="amenities"
                 multi={true}
                 removeSelected={true}
@@ -94,8 +85,6 @@ class FilterBar extends Component {
             <div className="category-filter filter-box col-md-3">
               <h6>Location</h6>
               <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
                 type="cities"
                 filterSelect={this.handleFilterSelect}
                 selectedOption={this.props.categories}
@@ -103,18 +92,11 @@ class FilterBar extends Component {
             </div>
             <div className="price-filter filter-box col-md-3">
               <h6>Date</h6>
-              <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
-                type="months"
-                filterSelect={this.handleFilterSelect}
-              />
+              <Filter type="months" filterSelect={this.handleFilterSelect} />
             </div>
             <div className="tag-filter filter-box col-md-6">
               <h6>Filters</h6>
               <Filter
-                listingType={this.props.listingType}
-                themeURL={this.props.themeURL}
                 type="amenities"
                 multi={true}
                 removeSelected={true}

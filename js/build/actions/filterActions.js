@@ -50,6 +50,8 @@ function getEventFilters(listings) {
   };
 }
 
+// TODO: these functions are redundant
+
 function requestAllCategories(dispatch, type) {
   dispatch({ type: _actionTypes.ActionTypes.REQUEST_CATEGORIES, data: type });
   var url = dataRoute + type + '-categories?hide_empty=true&per_page=100';

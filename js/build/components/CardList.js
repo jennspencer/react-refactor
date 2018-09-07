@@ -148,8 +148,6 @@ var CardList = function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
-
       var listingData = this.state.listings;
       return _react2.default.createElement(
         'div',
@@ -160,8 +158,6 @@ var CardList = function (_Component) {
         }),
         _react2.default.createElement(_FilterBar2.default, {
           filterSelect: this.filterSelect,
-          listingType: this.props.listingType,
-          themeURL: this.props.themeURL,
           categories: this.state.categories
         }),
         _react2.default.createElement(
@@ -171,11 +167,7 @@ var CardList = function (_Component) {
             'div',
             { className: 'listings' },
             listingData.length ? listingData.map(function (listing, i) {
-              return _react2.default.createElement(_Card2.default, {
-                listing: listing,
-                key: i,
-                listingType: _this3.props.listingType
-              });
+              return _react2.default.createElement(_Card2.default, { listing: listing, key: i });
             }) : null
           ),
           _react2.default.createElement(_reactVisibilitySensor2.default, {

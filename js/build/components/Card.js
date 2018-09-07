@@ -12,6 +12,8 @@ var _propTypes = require('prop-types');
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
+var _constants = require('../constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Card = function Card(props) {
@@ -34,7 +36,6 @@ var Card = function Card(props) {
       longDesc = _props$listing.longDesc;
 
 
-  var listingType = props.listingType;
   return _react2.default.createElement(
     'div',
     { className: 'card', itemScope: true, itemType: 'http://schema.org/' + placeType },
@@ -50,7 +51,7 @@ var Card = function Card(props) {
         }
       },
       _react2.default.createElement('img', { itemProp: 'url', src: image }),
-      listingType === 'events' ? _react2.default.createElement(
+      _constants.listingType === 'events' ? _react2.default.createElement(
         'h4',
         { className: 'card-overlay' },
         overlayDate
@@ -127,7 +128,7 @@ var Card = function Card(props) {
             )
           )
         ),
-        listingType !== 'events' ? _react2.default.createElement(
+        _constants.listingType !== 'events' ? _react2.default.createElement(
           'div',
           { className: 'card-website' },
           _react2.default.createElement(
@@ -150,7 +151,7 @@ var Card = function Card(props) {
           itemProp: 'description',
           dangerouslySetInnerHTML: { __html: description }
         }),
-        longDesc || listingType === 'events' ? _react2.default.createElement(
+        longDesc || _constants.listingType === 'events' ? _react2.default.createElement(
           'a',
           { href: link, className: 'card-link btn-arrow' },
           'Read More'

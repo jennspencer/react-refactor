@@ -43,6 +43,8 @@ export function getEventFilters(listings) {
   }
 }
 
+// TODO: these functions are redundant
+
 function requestAllCategories(dispatch, type) {
   dispatch({ type: types.REQUEST_CATEGORIES, data: type })
   let url = dataRoute + type + '-categories?hide_empty=true&per_page=100'

@@ -87,9 +87,7 @@ Filter.propTypes = {
 };
 
 Filter.defaultProps = {
-  filterSelect: function filterSelect(type, value) {
-    // console.log('filter default', type, value);
-  }
+  filterSelect: function filterSelect(type, value) {}
 };
 
 function mapStateToProps(state, ownProps) {

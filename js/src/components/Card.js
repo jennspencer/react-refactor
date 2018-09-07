@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { listingType } from '../constants'
 
 const Card = props => {
   let {
@@ -21,7 +22,6 @@ const Card = props => {
     longDesc,
   } = props.listing
 
-  let listingType = props.listingType
   return (
     <div className="card" itemScope itemType={'http://schema.org/' + placeType}>
       <div

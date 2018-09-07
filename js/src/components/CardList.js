@@ -113,19 +113,13 @@ class CardList extends Component {
         />
         <FilterBar
           filterSelect={this.filterSelect}
-          listingType={this.props.listingType}
-          themeURL={this.props.themeURL}
           categories={this.state.categories}
         />
         <div className="row">
           <div className="listings">
             {listingData.length
               ? listingData.map((listing, i) => (
-                  <Card
-                    listing={listing}
-                    key={i}
-                    listingType={this.props.listingType}
-                  />
+                  <Card listing={listing} key={i} />
                 ))
               : null}
           </div>

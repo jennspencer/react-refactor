@@ -46,9 +46,7 @@ Filter.propTypes = {
 }
 
 Filter.defaultProps = {
-  filterSelect: (type, value) => {
-    // console.log('filter default', type, value);
-  },
+  filterSelect: (type, value) => {},
 }
 
 function mapStateToProps(state, ownProps) {

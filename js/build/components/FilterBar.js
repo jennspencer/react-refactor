@@ -111,8 +111,6 @@ var FilterBar = function (_Component) {
               'Category'
             ),
             _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
               type: 'categories',
               filterSelect: this.handleFilterSelect,
               selectedOption: this.props.categories
@@ -126,12 +124,7 @@ var FilterBar = function (_Component) {
               null,
               'Sort'
             ),
-            _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
-              type: 'sort',
-              filterSelect: this.handleFilterSelect
-            })
+            _react2.default.createElement(_Filter2.default, { type: 'sort', filterSelect: this.handleFilterSelect })
           ),
           _react2.default.createElement(
             'div',
@@ -142,8 +135,6 @@ var FilterBar = function (_Component) {
               'Filters'
             ),
             _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
               type: 'amenities',
               multi: true,
               removeSelected: true,
@@ -165,8 +156,6 @@ var FilterBar = function (_Component) {
               'Location'
             ),
             _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
               type: 'cities',
               filterSelect: this.handleFilterSelect,
               selectedOption: this.props.categories
@@ -180,12 +169,7 @@ var FilterBar = function (_Component) {
               null,
               'Date'
             ),
-            _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
-              type: 'months',
-              filterSelect: this.handleFilterSelect
-            })
+            _react2.default.createElement(_Filter2.default, { type: 'months', filterSelect: this.handleFilterSelect })
           ),
           _react2.default.createElement(
             'div',
@@ -196,8 +180,6 @@ var FilterBar = function (_Component) {
               'Filters'
             ),
             _react2.default.createElement(_Filter2.default, {
-              listingType: this.props.listingType,
-              themeURL: this.props.themeURL,
               type: 'amenities',
               multi: true,
               removeSelected: true,
