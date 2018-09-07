@@ -37,7 +37,8 @@ function getEventFilters(listings) {
     return { name: listing.city[0] };
   }), 'name');
 
-  cities = _lodash2.default.orderBy(cities, name, 'asc');
+  cities = _lodash2.default.orderBy(cities, 'name', 'asc');
+
   months = _lodash2.default.uniqBy(listings.map(function (listing) {
     return { name: listing.month[0], date: listing.startDate };
   }), 'name');

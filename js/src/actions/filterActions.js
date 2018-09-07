@@ -23,7 +23,8 @@ export function getEventFilters(listings) {
     'name',
   )
 
-  cities = _.orderBy(cities, name, 'asc')
+  cities = _.orderBy(cities, 'name', 'asc')
+
   months = _.uniqBy(
     listings.map(listing => {
       return { name: listing.month[0], date: listing.startDate }

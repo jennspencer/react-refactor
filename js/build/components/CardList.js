@@ -24,10 +24,6 @@ var _FilterBar = require('./FilterBar');
 
 var _FilterBar2 = _interopRequireDefault(_FilterBar);
 
-var _es6Promise = require('es6-promise');
-
-require('isomorphic-fetch');
-
 var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);

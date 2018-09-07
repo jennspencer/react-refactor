@@ -22,6 +22,8 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _constants = require('../constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -96,7 +98,7 @@ var FilterBar = function (_Component) {
             )
           )
         ),
-        this.props.listingType != 'events' ? _react2.default.createElement(
+        _constants.LISTING_TYPE != 'events' ? _react2.default.createElement(
           'div',
           {
             className: 'row hide',

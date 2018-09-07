@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Filter from './Filter'
 import _ from 'lodash'
+import { LISTING_TYPE } from '../constants'
 
 class FilterBar extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class FilterBar extends Component {
             </h6>
           </div>
         </div>
-        {this.props.listingType != 'events' ? (
+        {LISTING_TYPE != 'events' ? (
           <div
             className="row hide"
             style={{ display: this.state.openFilters ? 'block' : '' }}
