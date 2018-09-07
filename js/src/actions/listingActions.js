@@ -1,21 +1,26 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
 import moment from 'moment'
-import { themeURL, listingType, customApiURL } from '../constants'
+import {
+  THEME_URL,
+  CUSTOM_API,
+  LISTING_DESC_LENGTH,
+  LISTING_TYPE,
+} from '../constants'
 import { getEventFilters } from './filterActions'
 
-const dataRoute = themeURL + customApiURL
+const dataRoute = THEME_URL + CUSTOM_API
 
-export function fetchAllListings(type) {
+export function fetchAllListings() {
   return dispatch => {
-    requestAllListings(dispatch, type)
+    requestAllListings(dispatch, LISTING_TYPE)
   }
 }
 
-function requestAllListings(dispatch, type) {
-  dispatch({ type: types.REQUEST_ALL_LISTINGS, data: type })
+function requestAllListings(dispatch) {
+  dispatch({ type: types.REQUEST_ALL_LISTINGS, data: LISTING_TYPE })
 
-  let url = dataRoute + type
+  let url = dataRoute + LISTING_TYPE
   fetch(url)
     .catch(error => {
       console.error('Error fetching API page', error)
@@ -31,28 +36,24 @@ function requestAllListings(dispatch, type) {
 
       // filter out excluded listings
       data = _.filter(data, { excluded: '0' })
-
       //normalize listing data for display
       data = normalizeListings(data)
 
-      if (type === 'events') {
+      if (LISTING_TYPE === 'events') {
         data = _.orderBy(data, 'startDate', 'asc')
+        // send data off to get event-specific filters
+        dispatch(getEventFilters(data))
       } else {
         data = _.shuffle(data)
         data = _.orderBy(data, 'featured', 'desc')
       }
 
       dispatch({ type: types.RECEIVED_ALL_LISTINGS_SUCCESS, data: data })
-
-      // send data off to get event-specific filters
-      if (type === 'events') {
-        dispatch(getEventFilters(data))
-      }
     })
 }
 
 function normalizeListings(listings) {
-  let postType = listingType
+  let postType = LISTING_TYPE
   let placeType = 'Place'
 
   switch (postType) {
@@ -114,8 +115,8 @@ function normalizeListings(listings) {
 
     let description = listing.description.split(' ')
     listing.longDesc = false
-    if (description.length > 35) {
-      description = description.slice(0, 35)
+    if (description.length > LISTING_DESC_LENGTH) {
+      description = description.slice(0, LISTING_DESC_LENGTH)
       description = description.join(' ')
       listing.description = description + ' ...'
       listing.longDesc = true

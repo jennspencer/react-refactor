@@ -24,15 +24,17 @@ var _CardList2 = _interopRequireDefault(_CardList);
 
 var _constants = require('./constants');
 
+var _constants2 = _interopRequireDefault(_constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var store = (0, _configureStore2.default)();
 
-store.dispatch((0, _listingActions.fetchAllListings)(_constants.listingType));
-store.dispatch((0, _filterActions.fetchAllFilters)(_constants.listingType));
+store.dispatch((0, _listingActions.fetchAllListings)(_constants2.default));
+store.dispatch((0, _filterActions.fetchAllFilters)(_constants2.default));
 
 _reactDom2.default.render(_react2.default.createElement(
   _reactRedux.Provider,
   { store: store },
-  _react2.default.createElement(_CardList2.default, { listingType: _constants.listingType, themeURL: _constants.themeURL })
+  _react2.default.createElement(_CardList2.default, null)
 ), document.getElementById('app'));

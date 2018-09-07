@@ -21,18 +21,18 @@ var _filterActions = require('./filterActions');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dataRoute = _constants.themeURL + _constants.customApiURL;
+var dataRoute = _constants.THEME_URL + _constants.CUSTOM_API;
 
-function fetchAllListings(type) {
+function fetchAllListings() {
   return function (dispatch) {
-    requestAllListings(dispatch, type);
+    requestAllListings(dispatch, _constants.LISTING_TYPE);
   };
 }
 
-function requestAllListings(dispatch, type) {
-  dispatch({ type: _actionTypes.ActionTypes.REQUEST_ALL_LISTINGS, data: type });
+function requestAllListings(dispatch) {
+  dispatch({ type: _actionTypes.ActionTypes.REQUEST_ALL_LISTINGS, data: _constants.LISTING_TYPE });
 
-  var url = dataRoute + type;
+  var url = dataRoute + _constants.LISTING_TYPE;
   fetch(url).catch(function (error) {
     console.error('Error fetching API page', error);
   }).then(function (response) {
@@ -45,28 +45,24 @@ function requestAllListings(dispatch, type) {
 
     // filter out excluded listings
     data = _lodash2.default.filter(data, { excluded: '0' });
-
     //normalize listing data for display
     data = normalizeListings(data);
 
-    if (type === 'events') {
+    if (_constants.LISTING_TYPE === 'events') {
       data = _lodash2.default.orderBy(data, 'startDate', 'asc');
+      // send data off to get event-specific filters
+      dispatch((0, _filterActions.getEventFilters)(data));
     } else {
       data = _lodash2.default.shuffle(data);
       data = _lodash2.default.orderBy(data, 'featured', 'desc');
     }
 
     dispatch({ type: _actionTypes.ActionTypes.RECEIVED_ALL_LISTINGS_SUCCESS, data: data });
-
-    // send data off to get event-specific filters
-    if (type === 'events') {
-      dispatch((0, _filterActions.getEventFilters)(data));
-    }
   });
 }
 
 function normalizeListings(listings) {
-  var postType = _constants.listingType;
+  var postType = _constants.LISTING_TYPE;
   var placeType = 'Place';
 
   switch (postType) {
@@ -108,8 +104,8 @@ function normalizeListings(listings) {
 
     var description = listing.description.split(' ');
     listing.longDesc = false;
-    if (description.length > 35) {
-      description = description.slice(0, 35);
+    if (description.length > _constants.LISTING_DESC_LENGTH) {
+      description = description.slice(0, _constants.LISTING_DESC_LENGTH);
       description = description.join(' ');
       listing.description = description + ' ...';
       listing.longDesc = true;

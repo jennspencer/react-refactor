@@ -7,6 +7,7 @@ import { polyfill } from 'es6-promise'
 import 'isomorphic-fetch'
 import _ from 'lodash'
 import Visible from 'react-visibility-sensor'
+import { NUM_OF_LISTINGS } from '../constants'
 
 class CardList extends Component {
   constructor(props) {
@@ -19,7 +20,7 @@ class CardList extends Component {
         ? window.location.hash.substring(1)
         : null,
       filterMap: {},
-      offset: 24,
+      offset: NUM_OF_LISTINGS,
       loading: true,
     }
 
@@ -32,7 +33,7 @@ class CardList extends Component {
 
     let data = this.props.allListings
     this.setState({
-      listings: data.slice(0, 24),
+      listings: data.slice(0, NUM_OF_LISTINGS),
       sortedListings: data,
       loading: false,
     })
@@ -52,8 +53,8 @@ class CardList extends Component {
   }
 
   lazyLoad(isVisible) {
-    if (this.state.sortedListings.length > 24 && isVisible) {
-      let newOffset = this.state.offset + 24
+    if (this.state.sortedListings.length > NUM_OF_LISTINGS && isVisible) {
+      let newOffset = this.state.offset + NUM_OF_LISTINGS
       let nextListings = this.state.sortedListings.slice(
         this.state.offset,
         newOffset,
@@ -95,8 +96,8 @@ class CardList extends Component {
           }
         }
         this.setState({
-          offset: 24,
-          listings: listings.slice(0, 24),
+          offset: NUM_OF_LISTINGS,
+          listings: listings.slice(0, NUM_OF_LISTINGS),
           sortedListings: listings,
         })
       },

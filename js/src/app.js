@@ -8,16 +8,16 @@ import { fetchAllListings } from './actions/listingActions'
 import { fetchAllFilters } from './actions/filterActions'
 
 import CardList from './components/CardList'
-import { themeURL, listingType } from './constants'
+import LISTING_TYPE from './constants'
 
 const store = configureStore()
 
-store.dispatch(fetchAllListings(listingType))
-store.dispatch(fetchAllFilters(listingType))
+store.dispatch(fetchAllListings(LISTING_TYPE))
+store.dispatch(fetchAllFilters(LISTING_TYPE))
 
 ReactDOM.render(
   <Provider store={store}>
-    <CardList listingType={listingType} themeURL={themeURL} />
+    <CardList />
   </Provider>,
   document.getElementById('app'),
 )

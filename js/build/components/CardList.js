@@ -36,6 +36,8 @@ var _reactVisibilitySensor = require('react-visibility-sensor');
 
 var _reactVisibilitySensor2 = _interopRequireDefault(_reactVisibilitySensor);
 
+var _constants = require('../constants');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -57,7 +59,7 @@ var CardList = function (_Component) {
       listings: [],
       categories: window.location.hash.substring(1) ? window.location.hash.substring(1) : null,
       filterMap: {},
-      offset: 24,
+      offset: _constants.NUM_OF_LISTINGS,
       loading: true
     };
 
@@ -73,7 +75,7 @@ var CardList = function (_Component) {
 
       var data = this.props.allListings;
       this.setState({
-        listings: data.slice(0, 24),
+        listings: data.slice(0, _constants.NUM_OF_LISTINGS),
         sortedListings: data,
         loading: false
       });
@@ -91,8 +93,8 @@ var CardList = function (_Component) {
   }, {
     key: 'lazyLoad',
     value: function lazyLoad(isVisible) {
-      if (this.state.sortedListings.length > 24 && isVisible) {
-        var newOffset = this.state.offset + 24;
+      if (this.state.sortedListings.length > _constants.NUM_OF_LISTINGS && isVisible) {
+        var newOffset = this.state.offset + _constants.NUM_OF_LISTINGS;
         var nextListings = this.state.sortedListings.slice(this.state.offset, newOffset);
         this.setState({
           offset: newOffset,
@@ -139,8 +141,8 @@ var CardList = function (_Component) {
           }
         }
         _this2.setState({
-          offset: 24,
-          listings: listings.slice(0, 24),
+          offset: _constants.NUM_OF_LISTINGS,
+          listings: listings.slice(0, _constants.NUM_OF_LISTINGS),
           sortedListings: listings
         });
       });

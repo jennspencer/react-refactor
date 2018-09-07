@@ -20,13 +20,13 @@ var _constants = require('../constants');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var dataRoute = _constants.themeURL + _constants.wpApiUrl;
+var dataRoute = _constants.THEME_URL + _constants.WP_API;
 
 function fetchAllFilters() {
   return function (dispatch) {
-    requestAllCategories(dispatch, _constants.listingType);
-    requestAllAmenities(dispatch, _constants.listingType);
-    requestAllPrices(dispatch, _constants.listingType);
+    requestAllCategories(dispatch, _constants.LISTING_TYPE);
+    requestAllAmenities(dispatch, _constants.LISTING_TYPE);
+    requestAllPrices(dispatch, _constants.LISTING_TYPE);
   };
 }
 

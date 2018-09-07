@@ -1,15 +1,15 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
 import moment from 'moment'
-import { themeURL, listingType, wpApiUrl } from '../constants'
+import { THEME_URL, LISTING_TYPE, WP_API } from '../constants'
 
-const dataRoute = themeURL + wpApiUrl
+const dataRoute = THEME_URL + WP_API
 
 export function fetchAllFilters() {
   return dispatch => {
-    requestAllCategories(dispatch, listingType)
-    requestAllAmenities(dispatch, listingType)
-    requestAllPrices(dispatch, listingType)
+    requestAllCategories(dispatch, LISTING_TYPE)
+    requestAllAmenities(dispatch, LISTING_TYPE)
+    requestAllPrices(dispatch, LISTING_TYPE)
   }
 }
 
