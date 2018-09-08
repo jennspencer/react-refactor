@@ -34,6 +34,8 @@ var _reactVisibilitySensor2 = _interopRequireDefault(_reactVisibilitySensor);
 
 var _constants = require('../constants');
 
+var _sortActions = require('../actions/sortActions');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51,111 +53,43 @@ var CardList = function (_Component) {
     var _this = _possibleConstructorReturn(this, (CardList.__proto__ || Object.getPrototypeOf(CardList)).call(this, props));
 
     _this.state = {
-      sortedListings: [],
-      listings: [],
-      categories: window.location.hash.substring(1) ? window.location.hash.substring(1) : null,
-      filterMap: {},
       offset: _constants.NUM_OF_LISTINGS,
       loading: true
     };
 
-    _this.filterSelect = _this.filterSelect.bind(_this);
     _this.lazyLoad = _this.lazyLoad.bind(_this);
     return _this;
   }
 
   _createClass(CardList, [{
-    key: 'getPage',
-    value: function getPage() {
-      this.setState({ loading: true });
-
-      var data = this.props.allListings;
-      this.setState({
-        listings: data.slice(0, _constants.NUM_OF_LISTINGS),
-        sortedListings: data,
-        loading: false
-      });
-      if (this.state.filterMap['categories'] === undefined && this.state.categories && this.state.categories !== '') {
-        this.filterSelect({ categories: this.state.categories });
-      }
-    }
-  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(newProps) {
-      if (this.props.allListings !== newProps.allListings) {
-        this.getPage();
+      if (this.props.listings !== newProps.listings) {
+        this.setState({
+          loading: false,
+          offset: _constants.NUM_OF_LISTINGS
+        });
       }
     }
   }, {
     key: 'lazyLoad',
     value: function lazyLoad(isVisible) {
-      if (this.state.sortedListings.length > _constants.NUM_OF_LISTINGS && isVisible) {
+      if (this.props.listings.length > _constants.NUM_OF_LISTINGS && isVisible) {
         var newOffset = this.state.offset + _constants.NUM_OF_LISTINGS;
-        var nextListings = this.state.sortedListings.slice(this.state.offset, newOffset);
         this.setState({
-          offset: newOffset,
-          listings: this.state.listings.concat(nextListings)
+          offset: newOffset
         });
       }
     }
   }, {
-    key: 'filterSelect',
-    value: function filterSelect(filterMap) {
-      var _this2 = this;
-
-      this.setState({
-        filterMap: filterMap
-      }, function () {
-        var listings = _this2.props.allListings;
-        if (!_lodash2.default.isEmpty(_this2.state.filterMap)) {
-          var filters = _this2.state.filterMap;
-
-          var _loop = function _loop(k) {
-            if (filters[k] && filters[k] !== '') {
-              if (k !== 'sort') {
-                var tags = filters[k].split(',');
-                var filteredListings = listings.filter(function (listing) {
-                  var hasFilters = listing[k].filter(function (f) {
-                    return tags.includes(f);
-                  });
-                  return hasFilters.length === tags.length ? listing : false;
-                });
-                listings = filteredListings;
-              }
-              if (k === 'sort') {
-                if (filters[k].length > 1) {
-                  var sorting = filters[k].split('-');
-                  listings = _lodash2.default.orderBy(listings, sorting[0], sorting[1]);
-                } else {
-                  listings = _lodash2.default.filter(listings, { price: filters[k] });
-                }
-              }
-            }
-          };
-
-          for (var k in filters) {
-            _loop(k);
-          }
-        }
-        _this2.setState({
-          offset: _constants.NUM_OF_LISTINGS,
-          listings: listings.slice(0, _constants.NUM_OF_LISTINGS),
-          sortedListings: listings
-        });
-      });
-    }
-  }, {
     key: 'render',
     value: function render() {
-      var listingData = this.state.listings;
+      var listingData = this.props.listings.slice(0, this.state.offset);
       return _react2.default.createElement(
         'div',
         { className: 'listings-page wrapper', style: { paddingBottom: '20px' } },
         this.state.loading ? _react2.default.createElement('div', { className: 'loading-overlay' }) : '',
-        _react2.default.createElement(_FilterBar2.default, {
-          filterSelect: this.filterSelect,
-          categories: this.state.categories
-        }),
+        _react2.default.createElement(_FilterBar2.default, null),
         _react2.default.createElement(
           'div',
           { className: 'row' },
@@ -187,17 +121,9 @@ var CardList = function (_Component) {
   return CardList;
 }(_react.Component);
 
-CardList.propTypes = {
-  filterSelect: _propTypes2.default.func
-};
-
-CardList.defaultProps = {
-  filterSelect: function filterSelect() {}
-};
-
 function mapStateToProps(state, ownProps) {
   return {
-    allListings: state.listings
+    listings: (0, _sortActions.filterListings)(state.listings, state.filterMap)
   };
 }
 

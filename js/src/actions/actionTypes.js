@@ -17,4 +17,5 @@ export const ActionTypes = keyMirror({
   // filter actions
   GET_MONTHS_FILTER: null,
   GET_CITIES_FILTER: null,
+  ADD_TO_FILTERMAP: null,
 })

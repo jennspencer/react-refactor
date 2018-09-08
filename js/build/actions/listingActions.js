@@ -87,13 +87,12 @@ function normalizeListings(listings) {
     listing.placeType = placeType;
     listing.listingAddress = 'https://www.google.com/maps/search/?api=1&query=' + listing.address1 + ' ' + listing.city + ' OR ' + (listing.zipcode ? listing.zipcode : '');
 
-    listing.priceDisplay = listing.price;
-    listing.price = listing.price.length;
+    if (listing.price) {
+      listing.priceDisplay = listing.price;
+      listing.price = listing.price.length;
+    }
 
     if (_constants.LISTING_TYPE === 'events') {
-      // add 'cities' key to make filtering more sane
-      listing.cities = listing.city;
-
       if (listing.startDate) {
         listing.startDate = (0, _moment2.default)(listing.startDate.toString()).format('dddd, MMMM D, YYYY');
         listing.overlayStartDate = (0, _moment2.default)(listing.startDate.toString()).format('MMM DD');

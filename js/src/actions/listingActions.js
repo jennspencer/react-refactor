@@ -84,13 +84,12 @@ function normalizeListings(listings) {
       ' OR ' +
       (listing.zipcode ? listing.zipcode : '')
 
-    listing.priceDisplay = listing.price
-    listing.price = listing.price.length
+    if (listing.price) {
+      listing.priceDisplay = listing.price
+      listing.price = listing.price.length
+    }
 
     if (LISTING_TYPE === 'events') {
-      // add 'cities' key to make filtering more sane
-      listing.cities = listing.city
-
       if (listing.startDate) {
         listing.startDate = moment(listing.startDate.toString()).format(
           'dddd, MMMM D, YYYY',

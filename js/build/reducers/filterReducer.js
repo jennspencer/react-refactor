@@ -22,10 +22,10 @@ function filterReducer() {
 
   switch (action.type) {
     case _actionTypes.ActionTypes.GET_CITIES_FILTER:
-      return _extends({}, state, { cities: action.data });
+      return _extends({}, state, { city: action.data });
 
     case _actionTypes.ActionTypes.GET_MONTHS_FILTER:
-      return _extends({}, state, { months: action.data });
+      return _extends({}, state, { month: action.data });
 
     case _actionTypes.ActionTypes.RECEIVED_CATEGORIES_SUCCESS:
       return _extends({}, state, { categories: action.data });

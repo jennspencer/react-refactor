@@ -4,10 +4,10 @@ import initialState from './initialState'
 export default function filterReducer(state = initialState.filters, action) {
   switch (action.type) {
     case types.GET_CITIES_FILTER:
-      return { ...state, cities: action.data }
+      return { ...state, city: action.data }
 
     case types.GET_MONTHS_FILTER:
-      return { ...state, months: action.data }
+      return { ...state, month: action.data }
 
     case types.RECEIVED_CATEGORIES_SUCCESS:
       return { ...state, categories: action.data }

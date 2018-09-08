@@ -28,6 +28,14 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _sortActions = require('../actions/sortActions');
+
+var sortActions = _interopRequireWildcard(_sortActions);
+
+var _redux = require('redux');
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -45,7 +53,7 @@ var Filter = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this, props));
 
     _this.state = {
-      value: _this.props.selectedOption ? _this.props.selectedOption : ''
+      value: ''
     };
 
     _this.handleSelectChange = _this.handleSelectChange.bind(_this);
@@ -56,7 +64,7 @@ var Filter = function (_Component) {
     key: 'handleSelectChange',
     value: function handleSelectChange(value) {
       this.setState({ value: value });
-      this.props.filterSelect(this.props.type, value);
+      this.props.actions.addToFilterMap(this.props.type, value);
     }
   }, {
     key: 'render',
@@ -94,4 +102,10 @@ function mapStateToProps(state, ownProps) {
   return { options: state.filters[ownProps.type] };
 }
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(Filter);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: (0, _redux.bindActionCreators)(sortActions, dispatch)
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Filter);

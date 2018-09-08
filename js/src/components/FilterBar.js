@@ -8,30 +8,14 @@ class FilterBar extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      filterMap: {},
       openFilters: false,
     }
-    if (this.props.categories) {
-      this.state.filterMap['categories'] = this.props.categories
-    }
 
-    this.handleFilterSelect = this.handleFilterSelect.bind(this)
     this.handleFilterClick = this.handleFilterClick.bind(this)
   }
 
   handleFilterClick() {
     this.setState({ openFilters: true })
-  }
-
-  handleFilterSelect(type, value) {
-    let filterMap = this.state.filterMap
-    filterMap[type] = value
-    if (type === 'categories') {
-      window.location.hash = value ? value : ''
-    }
-    filterMap = _.pickBy(filterMap, _.identity)
-    this.setState({ filterMap })
-    this.props.filterSelect(filterMap)
   }
 
   render() {
@@ -44,9 +28,9 @@ class FilterBar extends Component {
       sortType = 'sort'
     } else {
       categoryTitle = 'Location'
-      categoryType = 'cities'
+      categoryType = 'city'
       sortTitle = 'Date'
-      sortType = 'months'
+      sortType = 'month'
     }
 
     return (
@@ -72,26 +56,17 @@ class FilterBar extends Component {
         >
           <div className="category-filter filter-box col-md-3">
             <h6>{categoryTitle}</h6>
-            <Filter
-              type={categoryType}
-              filterSelect={this.handleFilterSelect}
-              selectedOption={this.props.categories}
-            />
+            <Filter type={categoryType} />
           </div>
 
           <div className="price-filter filter-box col-md-3">
             <h6>{sortTitle}</h6>
-            <Filter type={sortType} filterSelect={this.handleFilterSelect} />
+            <Filter type={sortType} />
           </div>
 
           <div className="tag-filter filter-box col-md-6">
             <h6>Filters</h6>
-            <Filter
-              type="amenities"
-              multi={true}
-              removeSelected={true}
-              filterSelect={this.handleFilterSelect}
-            />
+            <Filter type="amenities" multi={true} removeSelected={true} />
           </div>
         </div>
       </section>

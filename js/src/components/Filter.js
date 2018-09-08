@@ -5,12 +5,14 @@ import { connect } from 'react-redux'
 import { polyfill } from 'es6-promise'
 import 'isomorphic-fetch'
 import _ from 'lodash'
+import * as sortActions from '../actions/sortActions'
+import { bindActionCreators } from 'redux'
 
 class Filter extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: this.props.selectedOption ? this.props.selectedOption : '',
+      value: '',
     }
 
     this.handleSelectChange = this.handleSelectChange.bind(this)
@@ -18,7 +20,7 @@ class Filter extends Component {
 
   handleSelectChange(value) {
     this.setState({ value })
-    this.props.filterSelect(this.props.type, value)
+    this.props.actions.addToFilterMap(this.props.type, value)
   }
 
   render() {
@@ -53,4 +55,13 @@ function mapStateToProps(state, ownProps) {
   return { options: state.filters[ownProps.type] }
 }
 
-export default connect(mapStateToProps)(Filter)
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(sortActions, dispatch),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Filter)

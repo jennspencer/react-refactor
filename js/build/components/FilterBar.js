@@ -41,14 +41,9 @@ var FilterBar = function (_Component) {
     var _this = _possibleConstructorReturn(this, (FilterBar.__proto__ || Object.getPrototypeOf(FilterBar)).call(this, props));
 
     _this.state = {
-      filterMap: {},
       openFilters: false
     };
-    if (_this.props.categories) {
-      _this.state.filterMap['categories'] = _this.props.categories;
-    }
 
-    _this.handleFilterSelect = _this.handleFilterSelect.bind(_this);
     _this.handleFilterClick = _this.handleFilterClick.bind(_this);
     return _this;
   }
@@ -57,18 +52,6 @@ var FilterBar = function (_Component) {
     key: 'handleFilterClick',
     value: function handleFilterClick() {
       this.setState({ openFilters: true });
-    }
-  }, {
-    key: 'handleFilterSelect',
-    value: function handleFilterSelect(type, value) {
-      var filterMap = this.state.filterMap;
-      filterMap[type] = value;
-      if (type === 'categories') {
-        window.location.hash = value ? value : '';
-      }
-      filterMap = _lodash2.default.pickBy(filterMap, _lodash2.default.identity);
-      this.setState({ filterMap: filterMap });
-      this.props.filterSelect(filterMap);
     }
   }, {
     key: 'render',
@@ -85,9 +68,9 @@ var FilterBar = function (_Component) {
         sortType = 'sort';
       } else {
         categoryTitle = 'Location';
-        categoryType = 'cities';
+        categoryType = 'city';
         sortTitle = 'Date';
-        sortType = 'months';
+        sortType = 'month';
       }
 
       return _react2.default.createElement(
@@ -129,11 +112,7 @@ var FilterBar = function (_Component) {
               null,
               categoryTitle
             ),
-            _react2.default.createElement(_Filter2.default, {
-              type: categoryType,
-              filterSelect: this.handleFilterSelect,
-              selectedOption: this.props.categories
-            })
+            _react2.default.createElement(_Filter2.default, { type: categoryType })
           ),
           _react2.default.createElement(
             'div',
@@ -143,7 +122,7 @@ var FilterBar = function (_Component) {
               null,
               sortTitle
             ),
-            _react2.default.createElement(_Filter2.default, { type: sortType, filterSelect: this.handleFilterSelect })
+            _react2.default.createElement(_Filter2.default, { type: sortType })
           ),
           _react2.default.createElement(
             'div',
@@ -153,12 +132,7 @@ var FilterBar = function (_Component) {
               null,
               'Filters'
             ),
-            _react2.default.createElement(_Filter2.default, {
-              type: 'amenities',
-              multi: true,
-              removeSelected: true,
-              filterSelect: this.handleFilterSelect
-            })
+            _react2.default.createElement(_Filter2.default, { type: 'amenities', multi: true, removeSelected: true })
           )
         )
       );
