@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import Card from './Card'
 import FilterBar from './FilterBar'
-import _ from 'lodash'
 import Visible from 'react-visibility-sensor'
 import { NUM_OF_LISTINGS } from '../constants'
 import { filterListings } from '../actions/sortActions'
@@ -70,6 +69,10 @@ class CardList extends Component {
       </div>
     )
   }
+}
+
+CardList.propTypes = {
+  listings: PropTypes.array.isRequired,
 }
 
 function mapStateToProps(state, ownProps) {

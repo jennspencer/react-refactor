@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import Select from 'react-select'
 import { connect } from 'react-redux'
-import { polyfill } from 'es6-promise'
-import 'isomorphic-fetch'
-import _ from 'lodash'
 import * as sortActions from '../actions/sortActions'
 import { bindActionCreators } from 'redux'
 
@@ -41,14 +37,6 @@ class Filter extends Component {
       </div>
     )
   }
-}
-
-Filter.propTypes = {
-  filterSelect: PropTypes.func,
-}
-
-Filter.defaultProps = {
-  filterSelect: (type, value) => {},
 }
 
 function mapStateToProps(state, ownProps) {

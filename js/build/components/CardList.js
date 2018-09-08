@@ -24,10 +24,6 @@ var _FilterBar = require('./FilterBar');
 
 var _FilterBar2 = _interopRequireDefault(_FilterBar);
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _reactVisibilitySensor = require('react-visibility-sensor');
 
 var _reactVisibilitySensor2 = _interopRequireDefault(_reactVisibilitySensor);
@@ -120,6 +116,10 @@ var CardList = function (_Component) {
 
   return CardList;
 }(_react.Component);
+
+CardList.propTypes = {
+  listings: _propTypes2.default.array.isRequired
+};
 
 function mapStateToProps(state, ownProps) {
   return {

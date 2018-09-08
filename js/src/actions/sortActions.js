@@ -10,14 +10,17 @@ export function addToFilterMap(filterType, value) {
 export function filterListings(listings, filterMap) {
   for (let k in filterMap) {
     if (filterMap[k] && filterMap[k] !== '') {
+      // filter by categories, amenities, city, month
       if (k !== 'sort') {
         let tags = filterMap[k].split(',')
         let filteredListings = listings.filter(listing => {
+          // check if listing has all the selected 'tags'
           let hasFilters = listing[k].filter(f => tags.includes(f))
           return hasFilters.length === tags.length ? listing : false
         })
         listings = filteredListings
       }
+      // sort A-Z, sort by price, filter by price
       if (k === 'sort') {
         if (filterMap[k].length > 1) {
           let sorting = filterMap[k].split('-')

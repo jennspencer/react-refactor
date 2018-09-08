@@ -1,8 +1,6 @@
 import keyMirror from 'keymirror'
 
 export const ActionTypes = keyMirror({
-  NEW_ACTION: null,
-
   // ajax calls
   REQUEST_ALL_LISTINGS: null,
   REQUEST_CATEGORIES: null,

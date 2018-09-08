@@ -10,23 +10,11 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _reactSelect = require('react-select');
 
 var _reactSelect2 = _interopRequireDefault(_reactSelect);
 
 var _reactRedux = require('react-redux');
-
-var _es6Promise = require('es6-promise');
-
-require('isomorphic-fetch');
-
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
 
 var _sortActions = require('../actions/sortActions');
 
@@ -89,14 +77,6 @@ var Filter = function (_Component) {
 
   return Filter;
 }(_react.Component);
-
-Filter.propTypes = {
-  filterSelect: _propTypes2.default.func
-};
-
-Filter.defaultProps = {
-  filterSelect: function filterSelect(type, value) {}
-};
 
 function mapStateToProps(state, ownProps) {
   return { options: state.filters[ownProps.type] };

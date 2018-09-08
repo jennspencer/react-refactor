@@ -23,9 +23,11 @@ function addToFilterMap(filterType, value) {
 function filterListings(listings, filterMap) {
   var _loop = function _loop(k) {
     if (filterMap[k] && filterMap[k] !== '') {
+      // filter by categories, amenities, city, month
       if (k !== 'sort') {
         var tags = filterMap[k].split(',');
         var filteredListings = listings.filter(function (listing) {
+          // check if listing has all the selected 'tags'
           var hasFilters = listing[k].filter(function (f) {
             return tags.includes(f);
           });
@@ -33,6 +35,7 @@ function filterListings(listings, filterMap) {
         });
         listings = filteredListings;
       }
+      // sort A-Z, sort by price, filter by price
       if (k === 'sort') {
         if (filterMap[k].length > 1) {
           var sorting = filterMap[k].split('-');

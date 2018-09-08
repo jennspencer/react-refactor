@@ -12,8 +12,6 @@ var _keymirror2 = _interopRequireDefault(_keymirror);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ActionTypes = exports.ActionTypes = (0, _keymirror2.default)({
-  NEW_ACTION: null,
-
   // ajax calls
   REQUEST_ALL_LISTINGS: null,
   REQUEST_CATEGORIES: null,
