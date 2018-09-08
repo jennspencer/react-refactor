@@ -11,9 +11,17 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _moment = require('moment');
+var _is_future = require('date-fns/is_future');
 
-var _moment2 = _interopRequireDefault(_moment);
+var _is_future2 = _interopRequireDefault(_is_future);
+
+var _is_equal = require('date-fns/is_equal');
+
+var _is_equal2 = _interopRequireDefault(_is_equal);
+
+var _format = require('date-fns/format');
+
+var _format2 = _interopRequireDefault(_format);
 
 var _constants = require('../constants');
 
@@ -42,14 +50,17 @@ function requestAllListings(dispatch) {
     return response.json();
   }).then(function (data) {
     if (!data) return;
-
     // filter out excluded listings
     data = _lodash2.default.filter(data, { excluded: '0' });
     //normalize listing data for display
     data = normalizeListings(data);
 
+    return data;
+  }).then(function (data) {
     if (_constants.LISTING_TYPE === 'events') {
-      data = _lodash2.default.orderBy(data, 'startDate', 'asc');
+      data = _lodash2.default.orderBy(data, function (listing) {
+        return new Date(listing.startDate);
+      }, 'asc');
       // send data off to get event-specific filters
       dispatch((0, _filterActions.getEventFilters)(data));
     } else {
@@ -81,7 +92,7 @@ function normalizeListings(listings) {
       placeType = 'Place';
   }
 
-  var normalizedListings = listings.slice();
+  var normalizedListings = listings;
 
   normalizedListings.map(function (listing) {
     listing.placeType = placeType;
@@ -94,13 +105,13 @@ function normalizeListings(listings) {
 
     if (_constants.LISTING_TYPE === 'events') {
       if (listing.startDate) {
-        listing.startDate = (0, _moment2.default)(listing.startDate.toString()).format('dddd, MMMM D, YYYY');
-        listing.overlayStartDate = (0, _moment2.default)(listing.startDate.toString()).format('MMM DD');
+        listing.startDate = (0, _format2.default)(listing.startDate, 'dddd, MMMM D, YYYY');
+        listing.overlayStartDate = (0, _format2.default)(listing.startDate, 'MMM DD');
       }
 
       if (listing.endDate) {
-        listing.endDate = (0, _moment2.default)(listing.endDate.toString()).format('dddd, MMMM D, YYYY');
-        listing.overlayEndDate = (0, _moment2.default)(listing.endDate.toString()).format('MMM DD');
+        listing.endDate = (0, _format2.default)(listing.endDate, 'dddd, MMMM D, YYYY');
+        listing.overlayEndDate = (0, _format2.default)(listing.endDate, 'MMM DD');
       }
 
       listing.niceDate = listing.startDate === listing.endDate ? listing.startDate : listing.startDate + ' - ' + listing.endDate;
@@ -119,7 +130,7 @@ function normalizeListings(listings) {
       listing.description = description.join(' ');
     }
 
-    if (listing.endDate && (0, _moment2.default)(listing.endDate).isSameOrAfter((0, _moment2.default)(), 'day')) {
+    if (listing.endDate && ((0, _is_equal2.default)((0, _format2.default)(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) || (0, _is_future2.default)(listing.endDate))) {
       return listing;
     }
   });

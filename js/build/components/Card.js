@@ -47,11 +47,11 @@ var Card = function Card(props) {
         itemScope: true,
         itemType: 'http://schema.org/ImageObject',
         style: {
-          backgroundImage: image !== '' ? 'url("' + image + '")' : 'url("../wp-content/themes/visitmcminn/assets/images/graphic_missing_picture_@2x.png"'
+          backgroundImage: image !== '' ? 'url("' + image + '")' : 'url("' + _constants.THEME_URL + '/wp-content/themes/visitmcminn/assets/images/graphic_missing_picture_@2x.png"'
         }
       },
       _react2.default.createElement('img', { itemProp: 'url', src: image }),
-      _constants.listingType === 'events' ? _react2.default.createElement(
+      _constants.LISTING_TYPE === 'events' ? _react2.default.createElement(
         'h4',
         { className: 'card-overlay' },
         overlayDate
@@ -128,7 +128,7 @@ var Card = function Card(props) {
             )
           )
         ),
-        _constants.listingType !== 'events' ? _react2.default.createElement(
+        _constants.LISTING_TYPE !== 'events' ? _react2.default.createElement(
           'div',
           { className: 'card-website' },
           _react2.default.createElement(
@@ -151,7 +151,7 @@ var Card = function Card(props) {
           itemProp: 'description',
           dangerouslySetInnerHTML: { __html: description }
         }),
-        longDesc || _constants.listingType === 'events' ? _react2.default.createElement(
+        longDesc || _constants.LISTING_TYPE === 'events' ? _react2.default.createElement(
           'a',
           { href: link, className: 'card-link btn-arrow' },
           'Read More'

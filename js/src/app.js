@@ -8,12 +8,11 @@ import { fetchAllListings } from './actions/listingActions'
 import { fetchAllFilters } from './actions/filterActions'
 
 import CardList from './components/CardList'
-import LISTING_TYPE from './constants'
 
 const store = configureStore()
 
-store.dispatch(fetchAllListings(LISTING_TYPE))
-store.dispatch(fetchAllFilters(LISTING_TYPE))
+store.dispatch(fetchAllListings())
+store.dispatch(fetchAllFilters())
 
 ReactDOM.render(
   <Provider store={store}>

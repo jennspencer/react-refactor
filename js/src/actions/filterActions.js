@@ -1,6 +1,5 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
-import moment from 'moment'
 import { THEME_URL, LISTING_TYPE, WP_API } from '../constants'
 
 const dataRoute = THEME_URL + WP_API
@@ -34,7 +33,7 @@ export function getEventFilters(listings) {
   months = _.orderBy(
     months,
     month => {
-      return new moment(month.date)
+      return new Date(month.date)
     },
     'asc',
   )

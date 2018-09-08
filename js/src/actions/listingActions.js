@@ -1,6 +1,8 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
-import moment from 'moment'
+import isFuture from 'date-fns/is_future'
+import isEqual from 'date-fns/is_equal'
+import format from 'date-fns/format'
 import {
   THEME_URL,
   CUSTOM_API,
@@ -33,14 +35,22 @@ function requestAllListings(dispatch) {
     })
     .then(data => {
       if (!data) return
-
       // filter out excluded listings
       data = _.filter(data, { excluded: '0' })
       //normalize listing data for display
       data = normalizeListings(data)
 
+      return data
+    })
+    .then(data => {
       if (LISTING_TYPE === 'events') {
-        data = _.orderBy(data, 'startDate', 'asc')
+        data = _.orderBy(
+          data,
+          listing => {
+            return new Date(listing.startDate)
+          },
+          'asc',
+        )
         // send data off to get event-specific filters
         dispatch(getEventFilters(data))
       } else {
@@ -72,7 +82,7 @@ function normalizeListings(listings) {
       placeType = 'Place'
   }
 
-  let normalizedListings = listings.slice()
+  let normalizedListings = listings
 
   normalizedListings.map(listing => {
     listing.placeType = placeType
@@ -91,21 +101,13 @@ function normalizeListings(listings) {
 
     if (LISTING_TYPE === 'events') {
       if (listing.startDate) {
-        listing.startDate = moment(listing.startDate.toString()).format(
-          'dddd, MMMM D, YYYY',
-        )
-        listing.overlayStartDate = moment(listing.startDate.toString()).format(
-          'MMM DD',
-        )
+        listing.startDate = format(listing.startDate, 'dddd, MMMM D, YYYY')
+        listing.overlayStartDate = format(listing.startDate, 'MMM DD')
       }
 
       if (listing.endDate) {
-        listing.endDate = moment(listing.endDate.toString()).format(
-          'dddd, MMMM D, YYYY',
-        )
-        listing.overlayEndDate = moment(listing.endDate.toString()).format(
-          'MMM DD',
-        )
+        listing.endDate = format(listing.endDate, 'dddd, MMMM D, YYYY')
+        listing.overlayEndDate = format(listing.endDate, 'MMM DD')
       }
 
       listing.niceDate =
@@ -132,7 +134,8 @@ function normalizeListings(listings) {
 
     if (
       listing.endDate &&
-      moment(listing.endDate).isSameOrAfter(moment(), 'day')
+      (isEqual(format(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) ||
+        isFuture(listing.endDate))
     ) {
       return listing
     }

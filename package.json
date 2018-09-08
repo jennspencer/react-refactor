@@ -4,6 +4,7 @@
   "description": "My react app!",
   "main": "index.js",
   "dependencies": {
+    "date-fns": "^1.29.0",
     "es6-promise": "^4.2.4",
     "isomorphic-fetch": "^2.2.1",
     "moment": "^2.20.1",

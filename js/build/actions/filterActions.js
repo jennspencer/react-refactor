@@ -12,10 +12,6 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 var _constants = require('../constants');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -43,7 +39,7 @@ function getEventFilters(listings) {
     return { name: listing.month[0], date: listing.startDate };
   }), 'name');
   months = _lodash2.default.orderBy(months, function (month) {
-    return new _moment2.default(month.date);
+    return new Date(month.date);
   }, 'asc');
   return function (dispatch) {
     dispatch({ type: _actionTypes.ActionTypes.GET_MONTHS_FILTER, data: months.map(mapOptions) });

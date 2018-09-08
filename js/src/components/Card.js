@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { listingType } from '../constants'
+import { LISTING_TYPE, THEME_URL } from '../constants'
 
 const Card = props => {
   let {
@@ -33,11 +33,13 @@ const Card = props => {
           backgroundImage:
             image !== ''
               ? 'url("' + image + '")'
-              : 'url("../wp-content/themes/visitmcminn/assets/images/graphic_missing_picture_@2x.png"',
+              : 'url("' +
+                THEME_URL +
+                '/wp-content/themes/visitmcminn/assets/images/graphic_missing_picture_@2x.png"',
         }}
       >
         <img itemProp="url" src={image} />
-        {listingType === 'events' ? (
+        {LISTING_TYPE === 'events' ? (
           <h4 className="card-overlay">{overlayDate}</h4>
         ) : null}
       </div>
@@ -79,7 +81,7 @@ const Card = props => {
               <span itemProp="postalCode">{zipcode}</span>
             </a>
           </div>
-          {listingType !== 'events' ? (
+          {LISTING_TYPE !== 'events' ? (
             <div className="card-website">
               <a
                 className="website-click"
@@ -98,7 +100,7 @@ const Card = props => {
             itemProp="description"
             dangerouslySetInnerHTML={{ __html: description }}
           />
-          {longDesc || listingType === 'events' ? (
+          {longDesc || LISTING_TYPE === 'events' ? (
             <a href={link} className="card-link btn-arrow">
               Read More
             </a>
