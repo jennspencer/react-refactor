@@ -44,6 +44,7 @@ function requestAllListings(dispatch) {
     })
     .then(data => {
       if (LISTING_TYPE === 'events') {
+        console.log(data)
         data = _.orderBy(
           data,
           listing => {
@@ -82,64 +83,71 @@ function normalizeListings(listings) {
       placeType = 'Place'
   }
 
-  let normalizedListings = listings
+  return listings
+    .map(listing => {
+      // add approprate placeType for schema.org metadata
+      listing.placeType = placeType
 
-  normalizedListings.map(listing => {
-    listing.placeType = placeType
-    listing.listingAddress =
-      'https://www.google.com/maps/search/?api=1&query=' +
-      listing.address1 +
-      ' ' +
-      listing.city +
-      ' OR ' +
-      (listing.zipcode ? listing.zipcode : '')
+      // format address for google maps link
+      listing.listingAddress =
+        'https://www.google.com/maps/search/?api=1&query=' +
+        listing.address1 +
+        ' ' +
+        listing.city +
+        ' OR ' +
+        (listing.zipcode ? listing.zipcode : '')
 
-    if (listing.price) {
-      listing.priceDisplay = listing.price
-      listing.price = listing.price.length
-    }
-
-    if (LISTING_TYPE === 'events') {
-      if (listing.startDate) {
-        listing.startDate = format(listing.startDate, 'dddd, MMMM D, YYYY')
-        listing.overlayStartDate = format(listing.startDate, 'MMM DD')
+      // format price for sorting by price
+      if (listing.price) {
+        listing.priceDisplay = listing.price
+        listing.price = listing.price.length
       }
 
-      if (listing.endDate) {
-        listing.endDate = format(listing.endDate, 'dddd, MMMM D, YYYY')
-        listing.overlayEndDate = format(listing.endDate, 'MMM DD')
+      // format event dates for display
+      if (LISTING_TYPE === 'events') {
+        if (listing.startDate) {
+          listing.startDate = format(listing.startDate, 'dddd, MMMM D, YYYY')
+          listing.overlayStartDate = format(listing.startDate, 'MMM DD')
+        }
+
+        if (listing.endDate) {
+          listing.endDate = format(listing.endDate, 'dddd, MMMM D, YYYY')
+          listing.overlayEndDate = format(listing.endDate, 'MMM DD')
+        }
+
+        listing.niceDate =
+          listing.startDate === listing.endDate
+            ? listing.startDate
+            : listing.startDate + ' - ' + listing.endDate
+
+        listing.overlayDate =
+          listing.startDate === listing.endDate
+            ? listing.overlayStartDate
+            : listing.overlayStartDate + ' - ' + listing.overlayEndDate
       }
 
-      listing.niceDate =
-        listing.startDate === listing.endDate
-          ? listing.startDate
-          : listing.startDate + ' - ' + listing.endDate
+      // format description if longer than LISTING_DESC_LENGTH num of words
+      let description = listing.description.split(' ')
+      listing.longDesc = false
+      if (description.length > LISTING_DESC_LENGTH) {
+        description = description.slice(0, LISTING_DESC_LENGTH)
+        description = description.join(' ')
+        listing.description = description + ' ...'
+        listing.longDesc = true
+      } else {
+        listing.description = description.join(' ')
+      }
 
-      listing.overlayDate =
-        listing.startDate === listing.endDate
-          ? listing.overlayStartDate
-          : listing.overlayStartDate + ' - ' + listing.overlayEndDate
-    }
-
-    let description = listing.description.split(' ')
-    listing.longDesc = false
-    if (description.length > LISTING_DESC_LENGTH) {
-      description = description.slice(0, LISTING_DESC_LENGTH)
-      description = description.join(' ')
-      listing.description = description + ' ...'
-      listing.longDesc = true
-    } else {
-      listing.description = description.join(' ')
-    }
-
-    if (
-      listing.endDate &&
-      (isEqual(format(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) ||
-        isFuture(listing.endDate))
-    ) {
       return listing
-    }
-  })
-
-  return normalizedListings
+    })
+    .filter(listing => {
+      // return if no end date exists (not an event)
+      if (!listing.endDate) return true
+      // return if end date exists and is today or in the future
+      return (
+        listing.endDate &&
+        (isEqual(format(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) ||
+          isFuture(listing.endDate))
+      )
+    })
 }

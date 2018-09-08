@@ -58,6 +58,7 @@ function requestAllListings(dispatch) {
     return data;
   }).then(function (data) {
     if (_constants.LISTING_TYPE === 'events') {
+      console.log(data);
       data = _lodash2.default.orderBy(data, function (listing) {
         return new Date(listing.startDate);
       }, 'asc');
@@ -92,17 +93,20 @@ function normalizeListings(listings) {
       placeType = 'Place';
   }
 
-  var normalizedListings = listings;
-
-  normalizedListings.map(function (listing) {
+  return listings.map(function (listing) {
+    // add approprate placeType for schema.org metadata
     listing.placeType = placeType;
+
+    // format address for google maps link
     listing.listingAddress = 'https://www.google.com/maps/search/?api=1&query=' + listing.address1 + ' ' + listing.city + ' OR ' + (listing.zipcode ? listing.zipcode : '');
 
+    // format price for sorting by price
     if (listing.price) {
       listing.priceDisplay = listing.price;
       listing.price = listing.price.length;
     }
 
+    // format event dates for display
     if (_constants.LISTING_TYPE === 'events') {
       if (listing.startDate) {
         listing.startDate = (0, _format2.default)(listing.startDate, 'dddd, MMMM D, YYYY');
@@ -119,6 +123,7 @@ function normalizeListings(listings) {
       listing.overlayDate = listing.startDate === listing.endDate ? listing.overlayStartDate : listing.overlayStartDate + ' - ' + listing.overlayEndDate;
     }
 
+    // format description if longer than LISTING_DESC_LENGTH num of words
     var description = listing.description.split(' ');
     listing.longDesc = false;
     if (description.length > _constants.LISTING_DESC_LENGTH) {
@@ -130,10 +135,11 @@ function normalizeListings(listings) {
       listing.description = description.join(' ');
     }
 
-    if (listing.endDate && ((0, _is_equal2.default)((0, _format2.default)(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) || (0, _is_future2.default)(listing.endDate))) {
-      return listing;
-    }
+    return listing;
+  }).filter(function (listing) {
+    // return if no end date exists (not an event)
+    if (!listing.endDate) return true;
+    // return if end date exists and is today or in the future
+    return listing.endDate && ((0, _is_equal2.default)((0, _format2.default)(new Date(), 'dddd, MMMM D, YYYY'), listing.endDate) || (0, _is_future2.default)(listing.endDate));
   });
-
-  return normalizedListings;
 }
