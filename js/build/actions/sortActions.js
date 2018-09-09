@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.addToFilterMap = addToFilterMap;
+exports.getFilterMapFromQueryString = getFilterMapFromQueryString;
 exports.filterListings = filterListings;
 
 var _actionTypes = require('../actions/actionTypes');
@@ -14,9 +15,15 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function addToFilterMap(filterType, value) {
+function addToFilterMap(filter) {
   return function (dispatch) {
-    dispatch({ type: _actionTypes.ActionTypes.ADD_TO_FILTERMAP, data: { filterType: filterType, value: value } });
+    dispatch({ type: _actionTypes.ActionTypes.ADD_TO_FILTERMAP, data: filter });
+  };
+}
+
+function getFilterMapFromQueryString(queryString) {
+  return function (dispatch) {
+    dispatch({ type: _actionTypes.ActionTypes.CREATE_FILTERMAP_FROM_URL, data: queryString });
   };
 }
 

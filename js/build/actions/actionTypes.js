@@ -26,5 +26,7 @@ var ActionTypes = exports.ActionTypes = (0, _keymirror2.default)({
   // filter actions
   GET_MONTHS_FILTER: null,
   GET_CITIES_FILTER: null,
-  ADD_TO_FILTERMAP: null
+  ADD_TO_FILTERMAP: null,
+
+  CREATE_FILTERMAP_FROM_URL: null
 });

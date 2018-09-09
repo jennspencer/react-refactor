@@ -55,10 +55,7 @@ function requestAllListings(dispatch) {
     //normalize listing data for display
     data = normalizeListings(data);
 
-    return data;
-  }).then(function (data) {
     if (_constants.LISTING_TYPE === 'events') {
-      console.log(data);
       data = _lodash2.default.orderBy(data, function (listing) {
         return new Date(listing.startDate);
       }, 'asc');
@@ -98,6 +95,7 @@ function normalizeListings(listings) {
     listing.placeType = placeType;
 
     // format address for google maps link
+    // TODO: add check for lat/long
     listing.listingAddress = 'https://www.google.com/maps/search/?api=1&query=' + listing.address1 + ' ' + listing.city + ' OR ' + (listing.zipcode ? listing.zipcode : '');
 
     // format price for sorting by price

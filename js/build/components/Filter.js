@@ -22,6 +22,10 @@ var sortActions = _interopRequireWildcard(_sortActions);
 
 var _redux = require('redux');
 
+var _queryString = require('query-string');
+
+var _queryString2 = _interopRequireDefault(_queryString);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -31,6 +35,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var parsed = _queryString2.default.parse(location.search);
 
 var Filter = function (_Component) {
   _inherits(Filter, _Component);
@@ -49,10 +55,21 @@ var Filter = function (_Component) {
   }
 
   _createClass(Filter, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      if (parsed !== '') {
+        this.setState({
+          value: parsed[this.props.type]
+        });
+      }
+    }
+  }, {
     key: 'handleSelectChange',
     value: function handleSelectChange(value) {
       this.setState({ value: value });
-      this.props.actions.addToFilterMap(this.props.type, value);
+      var filter = {};
+      filter[this.props.type] = value;
+      this.props.actions.addToFilterMap(filter);
     }
   }, {
     key: 'render',

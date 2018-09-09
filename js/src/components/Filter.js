@@ -3,6 +3,9 @@ import Select from 'react-select'
 import { connect } from 'react-redux'
 import * as sortActions from '../actions/sortActions'
 import { bindActionCreators } from 'redux'
+import queryString from 'query-string'
+
+const parsed = queryString.parse(location.search)
 
 class Filter extends Component {
   constructor(props) {
@@ -14,9 +17,19 @@ class Filter extends Component {
     this.handleSelectChange = this.handleSelectChange.bind(this)
   }
 
+  componentWillMount() {
+    if (parsed !== '') {
+      this.setState({
+        value: parsed[this.props.type],
+      })
+    }
+  }
+
   handleSelectChange(value) {
     this.setState({ value })
-    this.props.actions.addToFilterMap(this.props.type, value)
+    let filter = {}
+    filter[this.props.type] = value
+    this.props.actions.addToFilterMap(filter)
   }
 
   render() {

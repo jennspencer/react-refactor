@@ -40,11 +40,7 @@ function requestAllListings(dispatch) {
       //normalize listing data for display
       data = normalizeListings(data)
 
-      return data
-    })
-    .then(data => {
       if (LISTING_TYPE === 'events') {
-        console.log(data)
         data = _.orderBy(
           data,
           listing => {
@@ -89,6 +85,7 @@ function normalizeListings(listings) {
       listing.placeType = placeType
 
       // format address for google maps link
+      // TODO: add check for lat/long
       listing.listingAddress =
         'https://www.google.com/maps/search/?api=1&query=' +
         listing.address1 +

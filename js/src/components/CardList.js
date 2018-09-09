@@ -5,7 +5,11 @@ import Card from './Card'
 import FilterBar from './FilterBar'
 import Visible from 'react-visibility-sensor'
 import { NUM_OF_LISTINGS } from '../constants'
-import { filterListings } from '../actions/sortActions'
+import { bindActionCreators } from 'redux'
+import * as sortActions from '../actions/sortActions'
+import queryString from 'query-string'
+
+const parsed = queryString.parse(location.search)
 
 class CardList extends Component {
   constructor(props) {
@@ -19,7 +23,20 @@ class CardList extends Component {
     this.lazyLoad = this.lazyLoad.bind(this)
   }
 
+  componentWillMount() {
+    if (parsed !== '') {
+      this.props.actions.getFilterMapFromQueryString(parsed)
+    }
+  }
+
   componentDidUpdate(newProps) {
+    if (this.props.filterMap !== newProps.filterMap) {
+      window.history.replaceState(
+        null,
+        null,
+        '?' + queryString.stringify(this.props.filterMap),
+      )
+    }
     if (this.props.listings !== newProps.listings) {
       this.setState({
         loading: false,
@@ -77,8 +94,18 @@ CardList.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    listings: filterListings(state.listings, state.filterMap),
+    listings: sortActions.filterListings(state.listings, state.filterMap),
+    filterMap: state.filterMap,
   }
 }
 
-export default connect(mapStateToProps)(CardList)
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(sortActions, dispatch),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CardList)

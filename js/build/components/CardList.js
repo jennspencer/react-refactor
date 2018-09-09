@@ -30,7 +30,17 @@ var _reactVisibilitySensor2 = _interopRequireDefault(_reactVisibilitySensor);
 
 var _constants = require('../constants');
 
+var _redux = require('redux');
+
 var _sortActions = require('../actions/sortActions');
+
+var sortActions = _interopRequireWildcard(_sortActions);
+
+var _queryString = require('query-string');
+
+var _queryString2 = _interopRequireDefault(_queryString);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,6 +49,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var parsed = _queryString2.default.parse(location.search);
 
 var CardList = function (_Component) {
   _inherits(CardList, _Component);
@@ -58,8 +70,18 @@ var CardList = function (_Component) {
   }
 
   _createClass(CardList, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      if (parsed !== '') {
+        this.props.actions.getFilterMapFromQueryString(parsed);
+      }
+    }
+  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(newProps) {
+      if (this.props.filterMap !== newProps.filterMap) {
+        window.history.replaceState(null, null, '?' + _queryString2.default.stringify(this.props.filterMap));
+      }
       if (this.props.listings !== newProps.listings) {
         this.setState({
           loading: false,
@@ -123,8 +145,15 @@ CardList.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   return {
-    listings: (0, _sortActions.filterListings)(state.listings, state.filterMap)
+    listings: sortActions.filterListings(state.listings, state.filterMap),
+    filterMap: state.filterMap
   };
 }
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(CardList);
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: (0, _redux.bindActionCreators)(sortActions, dispatch)
+  };
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(CardList);
