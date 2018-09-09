@@ -22,10 +22,6 @@ var sortActions = _interopRequireWildcard(_sortActions);
 
 var _redux = require('redux');
 
-var _queryString = require('query-string');
-
-var _queryString2 = _interopRequireDefault(_queryString);
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36,8 +32,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var parsed = _queryString2.default.parse(location.search);
-
 var Filter = function (_Component) {
   _inherits(Filter, _Component);
 
@@ -47,7 +41,7 @@ var Filter = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Filter.__proto__ || Object.getPrototypeOf(Filter)).call(this, props));
 
     _this.state = {
-      value: ''
+      value: _this.props.filterMap[_this.props.type]
     };
 
     _this.handleSelectChange = _this.handleSelectChange.bind(_this);
@@ -55,15 +49,6 @@ var Filter = function (_Component) {
   }
 
   _createClass(Filter, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      if (parsed !== '') {
-        this.setState({
-          value: parsed[this.props.type]
-        });
-      }
-    }
-  }, {
     key: 'handleSelectChange',
     value: function handleSelectChange(value) {
       this.setState({ value: value });
@@ -96,7 +81,10 @@ var Filter = function (_Component) {
 }(_react.Component);
 
 function mapStateToProps(state, ownProps) {
-  return { options: state.filters[ownProps.type] };
+  return {
+    options: state.filters[ownProps.type],
+    filterMap: state.filterMap
+  };
 }
 
 function mapDispatchToProps(dispatch) {

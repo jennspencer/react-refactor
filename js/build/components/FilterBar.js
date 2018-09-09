@@ -10,10 +10,6 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _propTypes = require('prop-types');
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
 var _Filter = require('./Filter');
 
 var _Filter2 = _interopRequireDefault(_Filter);
@@ -141,13 +137,5 @@ var FilterBar = function (_Component) {
 
   return FilterBar;
 }(_react.Component);
-
-FilterBar.propTypes = {
-  filterSelect: _propTypes2.default.func
-};
-
-FilterBar.defaultProps = {
-  filterSelect: function filterSelect(type, value) {}
-};
 
 exports.default = FilterBar;

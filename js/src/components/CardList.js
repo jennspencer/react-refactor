@@ -9,8 +9,6 @@ import { bindActionCreators } from 'redux'
 import * as sortActions from '../actions/sortActions'
 import queryString from 'query-string'
 
-const parsed = queryString.parse(location.search)
-
 class CardList extends Component {
   constructor(props) {
     super(props)
@@ -23,13 +21,8 @@ class CardList extends Component {
     this.lazyLoad = this.lazyLoad.bind(this)
   }
 
-  componentWillMount() {
-    if (parsed !== '') {
-      this.props.actions.getFilterMapFromQueryString(parsed)
-    }
-  }
-
   componentDidUpdate(newProps) {
+    // TODO: move query string manipulation out of component
     if (this.props.filterMap !== newProps.filterMap) {
       window.history.replaceState(
         null,

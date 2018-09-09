@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import Filter from './Filter'
 import _ from 'lodash'
 import { LISTING_TYPE } from '../constants'
@@ -72,14 +71,6 @@ class FilterBar extends Component {
       </section>
     )
   }
-}
-
-FilterBar.propTypes = {
-  filterSelect: PropTypes.func,
-}
-
-FilterBar.defaultProps = {
-  filterSelect: (type, value) => {},
 }
 
 export default FilterBar

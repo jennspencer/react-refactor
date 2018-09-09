@@ -50,8 +50,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var parsed = _queryString2.default.parse(location.search);
-
 var CardList = function (_Component) {
   _inherits(CardList, _Component);
 
@@ -70,15 +68,9 @@ var CardList = function (_Component) {
   }
 
   _createClass(CardList, [{
-    key: 'componentWillMount',
-    value: function componentWillMount() {
-      if (parsed !== '') {
-        this.props.actions.getFilterMapFromQueryString(parsed);
-      }
-    }
-  }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(newProps) {
+      // TODO: move query string manipulation out of component
       if (this.props.filterMap !== newProps.filterMap) {
         window.history.replaceState(null, null, '?' + _queryString2.default.stringify(this.props.filterMap));
       }
