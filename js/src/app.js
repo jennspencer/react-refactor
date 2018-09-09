@@ -12,7 +12,16 @@ import CardList from './components/CardList'
 import queryString from 'query-string'
 
 const parsed = queryString.parse(location.search)
+const parsedHash = queryString.parse(location.hash)
 const store = configureStore()
+
+console.log(parsed, parsedHash)
+
+// backwards compatibility for links using location.hash 'category'
+if (Object.keys(parsedHash).length) {
+  let category = Object.keys(parsedHash)
+  parsed['categories'] = category[0]
+}
 
 store.dispatch(fetchAllListings())
 store.dispatch(fetchAllFilters())

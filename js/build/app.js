@@ -31,7 +31,16 @@ var _queryString2 = _interopRequireDefault(_queryString);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var parsed = _queryString2.default.parse(location.search);
+var parsedHash = _queryString2.default.parse(location.hash);
 var store = (0, _configureStore2.default)();
+
+console.log(parsed, parsedHash);
+
+// backwards compatibility for links using location.hash 'category'
+if (Object.keys(parsedHash).length) {
+  var category = Object.keys(parsedHash);
+  parsed['categories'] = category[0];
+}
 
 store.dispatch((0, _listingActions.fetchAllListings)());
 store.dispatch((0, _filterActions.fetchAllFilters)());
