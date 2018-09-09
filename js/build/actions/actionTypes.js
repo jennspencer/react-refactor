@@ -23,6 +23,8 @@ var ActionTypes = exports.ActionTypes = (0, _keymirror2.default)({
   RECEIVED_AMENITIES_SUCCESS: null,
   RECEIVED_PRICES_SUCCESS: null,
 
+  AJAX_CALL_ERROR: null,
+
   // filter actions
   GET_MONTHS_FILTER: null,
   GET_CITIES_FILTER: null,

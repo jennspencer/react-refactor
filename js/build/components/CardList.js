@@ -59,8 +59,7 @@ var CardList = function (_Component) {
     var _this = _possibleConstructorReturn(this, (CardList.__proto__ || Object.getPrototypeOf(CardList)).call(this, props));
 
     _this.state = {
-      offset: _constants.NUM_OF_LISTINGS,
-      loading: true
+      offset: _constants.NUM_OF_LISTINGS
     };
 
     _this.lazyLoad = _this.lazyLoad.bind(_this);
@@ -76,7 +75,6 @@ var CardList = function (_Component) {
       }
       if (this.props.listings !== newProps.listings) {
         this.setState({
-          loading: false,
           offset: _constants.NUM_OF_LISTINGS
         });
       }
@@ -98,7 +96,7 @@ var CardList = function (_Component) {
       return _react2.default.createElement(
         'div',
         { className: 'listings-page wrapper', style: { paddingBottom: '20px' } },
-        this.state.loading ? _react2.default.createElement('div', { className: 'loading-overlay' }) : '',
+        this.props.loading ? _react2.default.createElement('div', { className: 'loading-overlay' }) : '',
         _react2.default.createElement(_FilterBar2.default, null),
         _react2.default.createElement(
           'div',
@@ -119,7 +117,7 @@ var CardList = function (_Component) {
         listingData.length === 0 ? _react2.default.createElement(
           'div',
           {
-            style: { display: this.state.loading ? 'none' : 'block' },
+            style: { display: this.props.loading ? 'none' : 'block' },
             className: 'no-results'
           },
           'No results found.'
@@ -138,7 +136,8 @@ CardList.propTypes = {
 function mapStateToProps(state, ownProps) {
   return {
     listings: sortActions.filterListings(state.listings, state.filterMap),
-    filterMap: state.filterMap
+    filterMap: state.filterMap,
+    loading: state.ajaxCallsInProgress > 0
   };
 }
 

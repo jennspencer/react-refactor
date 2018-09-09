@@ -2,15 +2,11 @@ import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
 
 export function addToFilterMap(filter) {
-  return dispatch => {
-    dispatch({ type: types.ADD_TO_FILTERMAP, data: filter })
-  }
+  return { type: types.ADD_TO_FILTERMAP, data: filter }
 }
 
 export function getFilterMapFromQueryString(queryString) {
-  return dispatch => {
-    dispatch({ type: types.CREATE_FILTERMAP_FROM_URL, data: queryString })
-  }
+  return { type: types.CREATE_FILTERMAP_FROM_URL, data: queryString }
 }
 
 export function filterListings(listings, filterMap) {

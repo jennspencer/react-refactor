@@ -34,8 +34,6 @@ var parsed = _queryString2.default.parse(location.search);
 var parsedHash = _queryString2.default.parse(location.hash);
 var store = (0, _configureStore2.default)();
 
-console.log(parsed, parsedHash);
-
 // backwards compatibility for links using location.hash 'category'
 if (Object.keys(parsedHash).length) {
   var category = Object.keys(parsedHash);

@@ -11,4 +11,5 @@ export default {
     month: [],
   },
   filterMap: {},
+  ajaxCallsInProgress: 0,
 }

@@ -27,6 +27,8 @@ var _constants = require('../constants');
 
 var _filterActions = require('./filterActions');
 
+var _ajaxStatusActions = require('./ajaxStatusActions');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var dataRoute = _constants.THEME_URL + _constants.CUSTOM_API;
@@ -38,16 +40,15 @@ function fetchAllListings() {
 }
 
 function requestAllListings(dispatch) {
-  dispatch({ type: _actionTypes.ActionTypes.REQUEST_ALL_LISTINGS, data: _constants.LISTING_TYPE });
+  dispatch((0, _ajaxStatusActions.beginAjaxCall)(_actionTypes.ActionTypes.REQUEST_ALL_LISTINGS, _constants.LISTING_TYPE));
 
   var url = dataRoute + _constants.LISTING_TYPE;
-  fetch(url).catch(function (error) {
-    console.error('Error fetching API page', error);
-  }).then(function (response) {
-    if (response.status !== 200 && response.ok) {
-      return;
+  fetch(url).then(function (response) {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
     }
-    return response.json();
   }).then(function (data) {
     if (!data) return;
     // filter out excluded listings
@@ -67,6 +68,9 @@ function requestAllListings(dispatch) {
     }
 
     dispatch({ type: _actionTypes.ActionTypes.RECEIVED_ALL_LISTINGS_SUCCESS, data: data });
+  }).catch(function (error) {
+    console.error('Error fetching API page', error);
+    dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
   });
 }
 

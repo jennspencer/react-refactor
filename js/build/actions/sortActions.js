@@ -16,15 +16,11 @@ var _lodash2 = _interopRequireDefault(_lodash);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function addToFilterMap(filter) {
-  return function (dispatch) {
-    dispatch({ type: _actionTypes.ActionTypes.ADD_TO_FILTERMAP, data: filter });
-  };
+  return { type: _actionTypes.ActionTypes.ADD_TO_FILTERMAP, data: filter };
 }
 
 function getFilterMapFromQueryString(queryString) {
-  return function (dispatch) {
-    dispatch({ type: _actionTypes.ActionTypes.CREATE_FILTERMAP_FROM_URL, data: queryString });
-  };
+  return { type: _actionTypes.ActionTypes.CREATE_FILTERMAP_FROM_URL, data: queryString };
 }
 
 function filterListings(listings, filterMap) {

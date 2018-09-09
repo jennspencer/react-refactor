@@ -15,7 +15,6 @@ class CardList extends Component {
 
     this.state = {
       offset: NUM_OF_LISTINGS,
-      loading: true,
     }
 
     this.lazyLoad = this.lazyLoad.bind(this)
@@ -32,7 +31,6 @@ class CardList extends Component {
     }
     if (this.props.listings !== newProps.listings) {
       this.setState({
-        loading: false,
         offset: NUM_OF_LISTINGS,
       })
     }
@@ -51,7 +49,7 @@ class CardList extends Component {
     let listingData = this.props.listings.slice(0, this.state.offset)
     return (
       <div className="listings-page wrapper" style={{ paddingBottom: '20px' }}>
-        {this.state.loading ? <div className="loading-overlay" /> : ''}
+        {this.props.loading ? <div className="loading-overlay" /> : ''}
 
         <FilterBar />
         <div className="row">
@@ -70,7 +68,7 @@ class CardList extends Component {
         </div>
         {listingData.length === 0 ? (
           <div
-            style={{ display: this.state.loading ? 'none' : 'block' }}
+            style={{ display: this.props.loading ? 'none' : 'block' }}
             className="no-results"
           >
             No results found.
@@ -89,6 +87,7 @@ function mapStateToProps(state, ownProps) {
   return {
     listings: sortActions.filterListings(state.listings, state.filterMap),
     filterMap: state.filterMap,
+    loading: state.ajaxCallsInProgress > 0,
   }
 }
 

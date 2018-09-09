@@ -1,5 +1,6 @@
 import { ActionTypes as types } from '../actions/actionTypes'
 import _ from 'lodash'
+import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions'
 import { THEME_URL, LISTING_TYPE, WP_API } from '../constants'
 
 const dataRoute = THEME_URL + WP_API
@@ -46,17 +47,15 @@ export function getEventFilters(listings) {
 // TODO: these functions are redundant
 
 function requestAllCategories(dispatch, type) {
-  dispatch({ type: types.REQUEST_CATEGORIES, data: type })
+  dispatch(beginAjaxCall(types.REQUEST_CATEGORIES, type))
   let url = dataRoute + type + '-categories?hide_empty=true&per_page=100'
   fetch(url)
-    .catch(error => {
-      console.error('Error fetching API page', error)
-    })
     .then(response => {
-      if (response.status !== 200) {
-        return
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
       }
-      return response.json()
     })
     .then(options => {
       dispatch({
@@ -64,20 +63,22 @@ function requestAllCategories(dispatch, type) {
         data: options.map(mapTags),
       })
     })
+    .catch(error => {
+      console.error('Error fetching API page', error)
+      dispatch(ajaxCallError(error))
+    })
 }
 
 function requestAllAmenities(dispatch, type) {
-  dispatch({ type: types.REQUEST_AMENITIES, data: type })
+  dispatch(beginAjaxCall(types.REQUEST_AMENITIES, type))
   let url = dataRoute + type + '-amenities?hide_empty=true&per_page=100'
   fetch(url)
-    .catch(error => {
-      console.error('Error fetching API page', error)
-    })
     .then(response => {
-      if (response.status !== 200) {
-        return
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
       }
-      return response.json()
     })
     .then(options => {
       dispatch({
@@ -85,30 +86,37 @@ function requestAllAmenities(dispatch, type) {
         data: options.map(mapTags),
       })
     })
+    .catch(error => {
+      console.error('Error fetching API page', error)
+      dispatch(ajaxCallError(error))
+    })
 }
 
 function requestAllPrices(dispatch, type) {
-  dispatch({ type: types.REQUEST_PRICES, data: type })
+  dispatch(beginAjaxCall(types.REQUEST_PRICES, type))
   let url = dataRoute + type + '-price?hide_empty=true&per_page=100'
 
   fetch(url)
-    .catch(error => {
-      console.error('Error fetching API page', error)
-    })
     .then(response => {
-      if (response.status !== 200) {
-        return
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
       }
-      return response.json()
     })
     .then(options => {
-      options = options.map(option => {
-        let value = option.name.length
-        return {
-          value,
-          label: option.name,
-        }
-      })
+      options = options
+        .map(option => {
+          let value = option.name.length
+          return {
+            value,
+            label: option.name,
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching API page', error)
+          dispatch(ajaxCallError(error))
+        })
 
       options = [
         { value: 'price-asc', label: 'Price Low to High' },
@@ -119,6 +127,10 @@ function requestAllPrices(dispatch, type) {
         type: types.RECEIVED_PRICES_SUCCESS,
         data: options,
       })
+    })
+    .catch(error => {
+      console.error('Error fetching API page', error)
+      dispatch(ajaxCallError(error))
     })
 }
 

@@ -12,6 +12,8 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _ajaxStatusActions = require('./ajaxStatusActions');
+
 var _constants = require('../constants');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -50,52 +52,55 @@ function getEventFilters(listings) {
 // TODO: these functions are redundant
 
 function requestAllCategories(dispatch, type) {
-  dispatch({ type: _actionTypes.ActionTypes.REQUEST_CATEGORIES, data: type });
+  dispatch((0, _ajaxStatusActions.beginAjaxCall)(_actionTypes.ActionTypes.REQUEST_CATEGORIES, type));
   var url = dataRoute + type + '-categories?hide_empty=true&per_page=100';
-  fetch(url).catch(function (error) {
-    console.error('Error fetching API page', error);
-  }).then(function (response) {
-    if (response.status !== 200) {
-      return;
+  fetch(url).then(function (response) {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
     }
-    return response.json();
   }).then(function (options) {
     dispatch({
       type: _actionTypes.ActionTypes.RECEIVED_CATEGORIES_SUCCESS,
       data: options.map(mapTags)
     });
+  }).catch(function (error) {
+    console.error('Error fetching API page', error);
+    dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
   });
 }
 
 function requestAllAmenities(dispatch, type) {
-  dispatch({ type: _actionTypes.ActionTypes.REQUEST_AMENITIES, data: type });
+  dispatch((0, _ajaxStatusActions.beginAjaxCall)(_actionTypes.ActionTypes.REQUEST_AMENITIES, type));
   var url = dataRoute + type + '-amenities?hide_empty=true&per_page=100';
-  fetch(url).catch(function (error) {
-    console.error('Error fetching API page', error);
-  }).then(function (response) {
-    if (response.status !== 200) {
-      return;
+  fetch(url).then(function (response) {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
     }
-    return response.json();
   }).then(function (options) {
     dispatch({
       type: _actionTypes.ActionTypes.RECEIVED_AMENITIES_SUCCESS,
       data: options.map(mapTags)
     });
+  }).catch(function (error) {
+    console.error('Error fetching API page', error);
+    dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
   });
 }
 
 function requestAllPrices(dispatch, type) {
-  dispatch({ type: _actionTypes.ActionTypes.REQUEST_PRICES, data: type });
+  dispatch((0, _ajaxStatusActions.beginAjaxCall)(_actionTypes.ActionTypes.REQUEST_PRICES, type));
   var url = dataRoute + type + '-price?hide_empty=true&per_page=100';
 
-  fetch(url).catch(function (error) {
-    console.error('Error fetching API page', error);
-  }).then(function (response) {
-    if (response.status !== 200) {
-      return;
+  fetch(url).then(function (response) {
+    if (response.status === 200) {
+      return response.json();
+    } else {
+      throw new Error(response.statusText);
     }
-    return response.json();
   }).then(function (options) {
     options = options.map(function (option) {
       var value = option.name.length;
@@ -103,6 +108,9 @@ function requestAllPrices(dispatch, type) {
         value: value,
         label: option.name
       };
+    }).catch(function (error) {
+      console.error('Error fetching API page', error);
+      dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
     });
 
     options = [{ value: 'price-asc', label: 'Price Low to High' }, { value: 'price-desc', label: 'Price High to Low' }].concat(options);
@@ -111,6 +119,9 @@ function requestAllPrices(dispatch, type) {
       type: _actionTypes.ActionTypes.RECEIVED_PRICES_SUCCESS,
       data: options
     });
+  }).catch(function (error) {
+    console.error('Error fetching API page', error);
+    dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
   });
 }
 

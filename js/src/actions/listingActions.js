@@ -10,6 +10,7 @@ import {
   LISTING_TYPE,
 } from '../constants'
 import { getEventFilters } from './filterActions'
+import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions'
 
 const dataRoute = THEME_URL + CUSTOM_API
 
@@ -20,18 +21,16 @@ export function fetchAllListings() {
 }
 
 function requestAllListings(dispatch) {
-  dispatch({ type: types.REQUEST_ALL_LISTINGS, data: LISTING_TYPE })
+  dispatch(beginAjaxCall(types.REQUEST_ALL_LISTINGS, LISTING_TYPE))
 
   let url = dataRoute + LISTING_TYPE
   fetch(url)
-    .catch(error => {
-      console.error('Error fetching API page', error)
-    })
     .then(response => {
-      if (response.status !== 200 && response.ok) {
-        return
+      if (response.status === 200) {
+        return response.json()
+      } else {
+        throw new Error(response.statusText)
       }
-      return response.json()
     })
     .then(data => {
       if (!data) return
@@ -56,6 +55,10 @@ function requestAllListings(dispatch) {
       }
 
       dispatch({ type: types.RECEIVED_ALL_LISTINGS_SUCCESS, data: data })
+    })
+    .catch(error => {
+      console.error('Error fetching API page', error)
+      dispatch(ajaxCallError(error))
     })
 }
 

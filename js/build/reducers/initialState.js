@@ -12,5 +12,6 @@ exports.default = {
     city: [],
     month: []
   },
-  filterMap: {}
+  filterMap: {},
+  ajaxCallsInProgress: 0
 };
