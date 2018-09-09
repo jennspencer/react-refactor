@@ -105,18 +105,13 @@ function requestAllPrices(dispatch, type) {
       }
     })
     .then(options => {
-      options = options
-        .map(option => {
-          let value = option.name.length
-          return {
-            value,
-            label: option.name,
-          }
-        })
-        .catch(error => {
-          console.error('Error fetching API page', error)
-          dispatch(ajaxCallError(error))
-        })
+      options = options.map(option => {
+        let value = option.name.length
+        return {
+          value,
+          label: option.name,
+        }
+      })
 
       options = [
         { value: 'price-asc', label: 'Price Low to High' },

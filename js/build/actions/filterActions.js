@@ -108,9 +108,6 @@ function requestAllPrices(dispatch, type) {
         value: value,
         label: option.name
       };
-    }).catch(function (error) {
-      console.error('Error fetching API page', error);
-      dispatch((0, _ajaxStatusActions.ajaxCallError)(error));
     });
 
     options = [{ value: 'price-asc', label: 'Price Low to High' }, { value: 'price-desc', label: 'Price High to Low' }].concat(options);
