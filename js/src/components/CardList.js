@@ -48,8 +48,17 @@ class CardList extends Component {
   render() {
     let listingData = this.props.listings.slice(0, this.state.offset)
     return (
-      <div className="listings-page wrapper" style={{ paddingBottom: '20px' }}>
-        {this.props.loading ? <div className="loading-overlay" /> : ''}
+      <div className="listings-page wrapper">
+        {this.props.loading ? (
+          <div className="loading-overlay">
+            <div className="spinner">
+              <i className="fa fa-spinner fa-pulse fa-3x fa-fw" />
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
+        ) : (
+          ''
+        )}
 
         <FilterBar />
         <div className="row">
