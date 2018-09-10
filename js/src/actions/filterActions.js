@@ -1,7 +1,8 @@
 import { ActionTypes as types } from '../actions/actionTypes'
-import _ from 'lodash'
 import { beginAjaxCall, ajaxCallError } from './ajaxStatusActions'
 import { THEME_URL, LISTING_TYPE, WP_API } from '../constants'
+import isSameMonth from 'date-fns/is_same_month'
+import isFuture from 'date-fns/is_future'
 
 const dataRoute = THEME_URL + WP_API
 
@@ -16,28 +17,23 @@ export function fetchAllFilters() {
 export function getEventFilters(listings) {
   let cities = []
   let months = []
-  cities = _.uniqBy(
-    listings.map(listing => {
-      return { name: listing.city[0] }
-    }),
-    'name',
-  )
 
-  cities = _.orderBy(cities, 'name', 'asc')
+  listings.forEach(listing => {
+    months = months.concat(listing.month)
+    cities = cities.concat(listing.city)
+  })
 
-  months = _.uniqBy(
-    listings.map(listing => {
-      return { name: listing.month[0], date: listing.startDate }
-    }),
-    'name',
-  )
-  months = _.orderBy(
-    months,
-    month => {
-      return new Date(month.date)
-    },
-    'asc',
-  )
+  // remove duplicates
+  months = [...new Set(months)]
+  cities = [...new Set(cities)]
+
+  cities.sort()
+
+  // filter out past months
+  months = months.filter(month => {
+    return isSameMonth(month, new Date()) || isFuture(month)
+  })
+
   return dispatch => {
     dispatch({ type: types.GET_MONTHS_FILTER, data: months.map(mapOptions) })
     dispatch({ type: types.GET_CITIES_FILTER, data: cities.map(mapOptions) })
@@ -138,7 +134,7 @@ function mapTags(option) {
 
 function mapOptions(option) {
   return {
-    value: option.name,
-    label: option.name,
+    value: option,
+    label: option,
   }
 }

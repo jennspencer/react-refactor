@@ -8,15 +8,21 @@ exports.getEventFilters = getEventFilters;
 
 var _actionTypes = require('../actions/actionTypes');
 
-var _lodash = require('lodash');
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
 var _ajaxStatusActions = require('./ajaxStatusActions');
 
 var _constants = require('../constants');
 
+var _is_same_month = require('date-fns/is_same_month');
+
+var _is_same_month2 = _interopRequireDefault(_is_same_month);
+
+var _is_future = require('date-fns/is_future');
+
+var _is_future2 = _interopRequireDefault(_is_future);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 var dataRoute = _constants.THEME_URL + _constants.WP_API;
 
@@ -31,18 +37,23 @@ function fetchAllFilters() {
 function getEventFilters(listings) {
   var cities = [];
   var months = [];
-  cities = _lodash2.default.uniqBy(listings.map(function (listing) {
-    return { name: listing.city[0] };
-  }), 'name');
 
-  cities = _lodash2.default.orderBy(cities, 'name', 'asc');
+  listings.forEach(function (listing) {
+    months = months.concat(listing.month);
+    cities = cities.concat(listing.city);
+  });
 
-  months = _lodash2.default.uniqBy(listings.map(function (listing) {
-    return { name: listing.month[0], date: listing.startDate };
-  }), 'name');
-  months = _lodash2.default.orderBy(months, function (month) {
-    return new Date(month.date);
-  }, 'asc');
+  // remove duplicates
+  months = [].concat(_toConsumableArray(new Set(months)));
+  cities = [].concat(_toConsumableArray(new Set(cities)));
+
+  cities.sort();
+
+  // filter out past months
+  months = months.filter(function (month) {
+    return (0, _is_same_month2.default)(month, new Date()) || (0, _is_future2.default)(month);
+  });
+
   return function (dispatch) {
     dispatch({ type: _actionTypes.ActionTypes.GET_MONTHS_FILTER, data: months.map(mapOptions) });
     dispatch({ type: _actionTypes.ActionTypes.GET_CITIES_FILTER, data: cities.map(mapOptions) });
@@ -131,7 +142,7 @@ function mapTags(option) {
 
 function mapOptions(option) {
   return {
-    value: option.name,
-    label: option.name
+    value: option,
+    label: option
   };
 }

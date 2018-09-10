@@ -3,6 +3,8 @@ import _ from 'lodash'
 import isFuture from 'date-fns/is_future'
 import isEqual from 'date-fns/is_equal'
 import format from 'date-fns/format'
+import differenceInCalendarMonths from 'date-fns/difference_in_calendar_months'
+import getMonth from 'date-fns/get_month'
 import {
   THEME_URL,
   CUSTOM_API,
@@ -105,6 +107,41 @@ function normalizeListings(listings) {
 
       // format event dates for display
       if (LISTING_TYPE === 'events') {
+        // get months for filter if event dates span more than one calendar month
+        let monthRange = differenceInCalendarMonths(
+          listing.endDate,
+          listing.startDate,
+        )
+
+        // months in date-fns are zero indexed, so Jan = 0, Dec = 11
+        // get number of first month of range
+        let firstMonth = getMonth(listing.startDate)
+
+        // if more than one month
+        if (monthRange !== 0) {
+          // m = 1 since first month is already accounted for in month array
+          for (let m = 1; m <= monthRange; m++) {
+            let startYear = format(listing.startDate, 'YYYY')
+            let endYear = format(listing.endDate, 'YYYY')
+            let zeroMonth = 0
+            // taking into account events that might span late Dec - early Jan
+            // this is all assuming an event doesn't span more than 2 years
+            if (m + firstMonth <= 11) {
+              listing.month.push(
+                format(new Date(startYear, m + firstMonth, 1), 'MMMM') +
+                  ' ' +
+                  startYear,
+              )
+            } else {
+              // else months start from Jan (month 0) of the following year
+              listing.month.push(
+                format(new Date(endYear, zeroMonth, 1), 'MMMM') + ' ' + endYear,
+              )
+              zeroMonth++
+            }
+          }
+        }
+
         if (listing.startDate) {
           listing.startDate = format(listing.startDate, 'dddd, MMMM D, YYYY')
           listing.overlayStartDate = format(listing.startDate, 'MMM DD')
