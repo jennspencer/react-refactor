@@ -1,2 +1,2 @@
 # react-refactor
-Old code is scary
+Refactoring an old React app to use Redux
